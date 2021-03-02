@@ -9,6 +9,7 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 // TODO:
 // - ISSUES FROM MIGRATING TO REACT
 //      [ ] Nav bar needs to show active link (using NavLink is really ugly which is why I changed it to Link)
+//      [ ] Nav bar spacing is slightly different now (less space between the icon and 'BakeTime')
 //      [ ] Fix the copyright year (it gets weird when I put {} in <script>)
 // - HIGH PRIORITY
 //      [ ] Fetch external data

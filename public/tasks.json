@@ -1,0 +1,30 @@
+[
+    {
+        "taskName": "baking",
+        "src": "img/baking-task.png",
+        "alt": "task: baking",
+        "title": "Oven by Llisole from the Noun Project",
+        "locations": [
+            "Top Oven", 
+            "Bottom Oven"
+        ]
+    },
+    {
+        "taskName": "chilling",
+        "src": "img/chilling-task.png",
+        "alt": "task: chilling",
+        "title": "Fridge by Ralf Schmitzer from the Noun Project",
+        "locations": [
+            "Fridge"
+        ]
+    },
+    {
+        "taskName": "resting",
+        "src": "img/resting-task.png",
+        "alt": "task: resting",
+        "title": "Baked Buns by Llisole from the Noun Project",
+        "locations": [
+            "Counter"
+        ]
+    }
+]

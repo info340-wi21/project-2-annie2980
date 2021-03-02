@@ -1,9 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Route, Switch, Link, Redirect, NavLink} from 'react-router-dom';
+import 'whatwg-fetch';
 import RecipeList from './Recipes';
 import About from './About';
 
 function App() {
+  // State value of an array of current timers
+  const [timerList, setTimerList] = useState([]);
+
+  // Store recipe and task data
+  const [recipes, setRecipes] = useState([]);
+  const [taskList, setTaskList] = useState([]);
+
+  // Fetch recipe data
+  useEffect(() => {
+    fetch("./recipes.json")
+      .then((response) => response.json())
+      .then((data) => {
+        let processedData = data;
+        setRecipes(processedData);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      })
+  }, []);
+
+  // Fetch task data
+  useEffect(() => {
+    fetch("./tasks.json")
+      .then((response) => response.json())
+      .then((data) => {
+        let processedData = data;
+        setTaskList(processedData);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      })
+  }, []);
+
   return (
 		<div>
 			{/* <!-- Navigation Bar --> */}

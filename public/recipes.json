@@ -1,0 +1,156 @@
+[
+    {
+        "recipeName": "Apple Pie",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:45:00",
+                "description": "Bake at 375 degreed F for 25 minutes. Remove foil; bake until crust is golden brown and filling is bubbly, 20 minutes longer."
+            }
+        ],
+        "prepTime": "00:20:00",
+        "cookTime": "00:45:00",
+        "totalTime": "01:05:00"
+    },
+    {
+        "recipeName": "Pumpkin Pie",
+        "steps": [
+            {
+                "task": "First Baking",
+                "time": "00:15:00",
+                "description": "Bake at 425 degrees F for 15 minutes."
+            },
+            {
+                "task": "Second Baking",
+                "time": "00:40:00",
+                "description": "Reduce oven temperature to 350 degrees F and continue baking 35 to 40 minutes or until knife inserted 1 inch from crust comes out clean."
+            }
+        ],
+        "prepTime": "00:15:00",
+        "cookTime": "00:55:00",
+        "totalTime": "01:10:00"
+    },
+    {
+        "recipeName": "Blueberry Scones",
+        "steps": [
+            {
+                "task": "Chilling",
+                "time": "00:15:00",
+                "description": "Place scones on a plate or lined baking sheet (if your fridge has space!) and refrigerate for at least 15 minutes."
+            },
+            {
+                "task": "Baking", 
+                "time": "00:25:00",
+                "description": "Line a large baking sheet with parchment paper or silicone baking mat. After refrigerating, arrange scones 2-3 inches apart on the prepared baking sheet(s). Bake at 400 degrees F for 25 minutes or until golden brown around the edges and lightly browned on top."
+            }
+        ],
+        "prepTime": "00:30:00",
+        "cookTime": "00:25:00",
+        "totalTime": "00:55:00"
+    },
+    {
+        "recipeName": "Croissants",
+        "steps": [
+            {
+                "task": "First Chilling",
+                "time": "00:30:00",
+                "description": "Place the entire baking sheet in the refrigerator and allow the covered dough to rest in the refrigerator for 30 minutes."
+            },
+            {
+                "task": "Second Chilling",
+                "time": "04:00:00",
+                "description": "Place the rolled out dough back onto the baking sheet. Cover the rolled out dough with plastic wrap or aluminum foil, place the entire baking sheet in the refrigerator and allow the covered dough to rest in the refrigerator for 4 hours or overnight. (Up to 24 hours is ok)."
+            },
+            {
+                "task": "Third Chilling",
+                "time": "00:30:00",
+                "description": "Place the entire baking sheet in the refrigerator and chill the butter layer for 30 minutes."
+            },
+            {
+                "task": "Fourth Chilling",
+                "time": "00:30:00",
+                "description": "Place the folded dough on the baking sheet, cover with plastic wrap or aluminum foil, and refrigerate for 30 minutes before the 3rd turn."
+            },
+            {
+                "task": "Fifth Chilling",
+                "time": "04:00:00",
+                "description": "Place the folded dough on the lined baking sheet, cover with plastic wrap or aluminum foil, and refrigerate for 4 hours or overnight. (Up to 24 hours is ok)."
+            },
+            {
+                "task": "Resting",
+                "time": "01:00:00",
+                "description": "Loosely cover the croissants with plastic wrap or aluminum foil and allow to rest at room temperature on the counter for 1 hour."
+            },
+            {
+                "task": "Sixth Chilling",
+                "time": "01:00:00",
+                "description": "Place the croissants in the refrigerator to rest for 1 hour or up to 12 hours."
+            },
+            {
+                "task": "Baking", 
+                "time": "00:20:00",
+                "description": "Bake at 400  degrees F until croissants are golden brown, about 20 minutes. Rotate the pans halfway through baking."
+            }
+        ],
+        "prepTime": "11:30:00",
+        "cookTime": "20:00",
+        "totalTime": "11:50:00"
+    },
+    {
+        "recipeName": "Chocolate Cake",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:30:00",
+                "description": "Bake at  350  degrees F for 30-35 minutes, until a toothpick or cake tester inserted in the center of the chocolate cake comes out clean."
+            }
+        ],
+        "prepTime": "00:15:00",
+        "cookTime": "00:30:00",
+        "totalTime": "00:45:00"
+    },
+    {
+        "recipeName": "Chocolate Chip Cookies",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:08:00",
+                "description": "Bake at 375 degrees F for approximately 8-10 minutes. Take them out when they are just barely starting to turn brown."
+            }
+        ],
+        "prepTime": "00:10:00",
+        "cookTime": "00:8:00",
+        "totalTime": "00:18:00"
+    },
+    {
+        "recipeName": "Cupcakes",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:18:00",
+                "description": "Bake at 350 degrees F for about 18 minutes or until centers are springy to the touch."
+            }
+        ],
+        "prepTime": "00:15:00",
+        "cookTime": "00:18:00",
+        "totalTime": "00:33:00"
+    },
+    {
+        "recipeName": "Macarons",
+        "steps": [
+            {
+                "task": "Resting",
+                "time": "01:00:00",
+                "description": "Let the macarons sit at room temperature for 30 minutes to 1 hour, until dry to the touch."
+            },
+            {
+                "task": "Baking", 
+                "time": "00:17:00",
+                "description": "Bake the macarons at 300 degrees F for 17 minutes, until the feet are well-risen and the macarons don’t stick to the parchment paper."
+            }
+        ],
+        "prepTime": "01:30:00",
+        "cookTime": "00:17:00",
+        "totalTime": "01:47:00"
+    }
+]
