@@ -113,19 +113,19 @@ function Acknowledgements() {
         <div className="subtitle mb-2">
           Images and Icons
         </div>
-        <a href="https://www.iconfinder.com/icons/877020/bakery_cafe_eshop_market_shop_store_icon" target="_blank">Bakery</a> by <a href="https://www.iconfinder.com/Bres" target="_blank">Goran Babic</a> from Iconfinder is licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>
+        <a href="https://www.iconfinder.com/icons/877020/bakery_cafe_eshop_market_shop_store_icon" rel="noreferrer" target="_blank">Bakery</a> by <a href="https://www.iconfinder.com/Bres" rel="noreferrer" target="_blank">Goran Babic</a> from Iconfinder is licensed under <a href="https://creativecommons.org/licenses/by/3.0/" rel="noreferrer" target="_blank">CC BY 3.0</a>
         <br/>
-        <a href="https://thenounproject.com/term/oven/1114693/" target="_blank">Oven</a> by <a href="https://thenounproject.com/llisole" target="_blank">Llisole</a> from the Noun Project is licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>
+        <a href="https://thenounproject.com/term/oven/1114693/" rel="noreferrer" target="_blank">Oven</a> by <a href="https://thenounproject.com/llisole" rel="noreferrer" target="_blank">Llisole</a> from the Noun Project is licensed under <a href="https://creativecommons.org/licenses/by/3.0/" rel="noreferrer" target="_blank">CC BY 3.0</a>
         <br/>
-        <a href="https://thenounproject.com/term/fridge/564397/" target="_blank">Fridge</a> by <a href="https://thenounproject.com/ralfschmitzer" target="_blank">Ralf Schmitzer</a> from the Noun Project is licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>
+        <a href="https://thenounproject.com/term/fridge/564397/" rel="noreferrer" target="_blank">Fridge</a> by <a href="https://thenounproject.com/ralfschmitzer" rel="noreferrer" target="_blank">Ralf Schmitzer</a> from the Noun Project is licensed under <a href="https://creativecommons.org/licenses/by/3.0/" rel="noreferrer" target="_blank">CC BY 3.0</a>
         <br/>
-        <a href="https://thenounproject.com/term/baked-buns/1114695/" target="_blank">Baked Buns</a> by <a href="https://thenounproject.com/llisole" target="_blank">Llisole</a> from the Noun Project is licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>
+        <a href="https://thenounproject.com/term/baked-buns/1114695/" rel="noreferrer" target="_blank">Baked Buns</a> by <a href="https://thenounproject.com/llisole" rel="noreferrer" target="_blank">Llisole</a> from the Noun Project is licensed under <a href="https://creativecommons.org/licenses/by/3.0/" rel="noreferrer" target="_blank">CC BY 3.0</a>
       </div>
       <div className="mt-3">
         <h2 className="subtitle">
           Code
         </h2>
-        Timer code adapted from SitePoint's <a href="https://www.sitepoint.com/build-javascript-countdown-timer-no-dependencies/" target="_blank">Build A Countdown Timer</a> by Yaphi Berhanu and Nilson Jacques
+        Timer code adapted from SitePoint's <a href="https://www.sitepoint.com/build-javascript-countdown-timer-no-dependencies/" rel="noreferrer" target="_blank">Build A Countdown Timer</a> by Yaphi Berhanu and Nilson Jacques
       </div>
     </section>
   );
