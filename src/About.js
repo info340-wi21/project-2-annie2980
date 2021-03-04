@@ -126,6 +126,8 @@ function Acknowledgements() {
           Code
         </h2>
         Timer code adapted from SitePoint's <a href="https://www.sitepoint.com/build-javascript-countdown-timer-no-dependencies/" rel="noreferrer" target="_blank">Build A Countdown Timer</a> by Yaphi Berhanu and Nilson Jacques
+        <br/>
+        Custom React timer hook library: <a href="https://www.npmjs.com/package/react-timer-hook" rel="noreferrer" target="_blank">react-timer-hook</a>
       </div>
     </section>
   );

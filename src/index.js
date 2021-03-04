@@ -15,6 +15,8 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 //      [x] Fix the copyright year (it gets weird when I put {} in <script>)
 // - HIGH PRIORITY
 //      [x] Fetch external data
+//      [ ] Add recipe modal (see line 220 in App.js)
+//      [ ] For Kerri: modularize everything!!
 // - MEDIUM PRIORITY
 //      [ ] Add a delete timer option?
 //          - What would be the interaction? Right-click on the row and then a modal pops up?

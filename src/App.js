@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {Route, Switch, Link, Redirect, NavLink} from 'react-router-dom';
+import { useTimer } from 'react-timer-hook';
 import 'whatwg-fetch';
 import RecipeList from './Recipes';
 import About from './About';
 
 function App() {
   // State value of an array of current timers
-  const [timerList, setTimerList] = useState([]);
+  const [timerList, setTimerList] = useState([
+    {recipeIndex: 0, item: "Apple Pie", task: "Baking", location: "Top Oven", endTime: getEndTime(0, 0, 10)},
+    {recipeIndex: 2, item: "Blueberry Scones", task: "Chilling", location: "Fridge", endTime: getEndTime(0, 0, 30)}
+  ]);
 
-  // Store recipe and task data
   const [recipes, setRecipes] = useState([]);
   const [taskList, setTaskList] = useState([]);
 
@@ -48,7 +51,7 @@ function App() {
       <main>
         <div>
           <Switch>
-            <Route exact path="/"> <Dashboard /> </Route>
+            <Route exact path="/"> <Dashboard timerList={timerList} setTimerList={setTimerList} recipes={recipes} taskList={taskList} /> </Route>
             <Route path="/recipes"> <RecipeList /> </Route>
             <Route path="/about"> <About /> </Route>
             <Redirect to="/" />
@@ -93,7 +96,55 @@ function NavBar() {
   );
 }
 
-function Dashboard() {
+// Represents the Dashboard "page"
+function Dashboard(props) {
+  const {timerList, setTimerList, recipes, taskList} = props;
+
+  // Function to handle removal of a timer from timerList
+  const handleRemove = function(timerRowIndex) {
+    // fresh object
+    const timerCopy = timerList.filter((timer, index) => {
+      return index !== timerRowIndex
+    });
+
+    // just in case, sort the array before rendering
+    timerCopy.sort((a, b) => a.endTime - b.endTime);
+
+    // update state
+    setTimerList(timerCopy);
+  };
+
+  // Function to handle adding a new timer to timerList
+  const handleAdd = function(newTimer) {
+    // fresh object
+    const timerCopy = timerList.map((timer) => {
+      return timer;
+    });
+
+    let timerToAdd = {};
+    timerToAdd.recipeIndex = newTimer.recipeIndex;
+    timerToAdd.item = newTimer.recipeName;
+    timerToAdd.task = newTimer.taskName;
+    timerToAdd.location = newTimer.location;
+    // Calculate when the timer should go off
+    timerToAdd.endTime = getEndTime(newTimer.hr, newTimer.min, newTimer.sec);
+
+    // Update stats
+    // state.totalTime += getSeconds(newTimer.hr, newTimer.min, newTimer.sec);
+    // if (newTimer.taskName.includes("Baking")) {
+    //     state.numTotalBakes++;
+    // }
+
+    // Add timer to list and clear state
+    timerCopy.push(timerToAdd);
+
+    // just in case, sort the array before rendering
+    timerCopy.sort((a, b) => a.endTime - b.endTime);
+
+    // update state
+    setTimerList(timerCopy);
+  };
+
   return (
     <div className="container-fluid main-container">
       {/* <!-- Button to Add Timer --> */}
@@ -111,7 +162,7 @@ function Dashboard() {
             </h1>
             <p>Your current tasks are listed below:</p>
           </div>
-          <TimerTable />
+          <TimerTable recipes={recipes} taskList={taskList} timerList={timerList} handleRemove={handleRemove} />
           <div className="container-fluid">
             <p className="click-more">Click on the item to see more information!</p>
           </div>
@@ -119,7 +170,7 @@ function Dashboard() {
 
         {/* <!-- Add Timer --> */}
         <section id="add-timer" className="add-timer col-sm-12 col-lg-4 col-xl-3 mt-3">
-          <AddTimer />
+          <AddTimer recipes={recipes} taskList={taskList} handleAdd={handleAdd} />
         </section>
 
         {/* <!-- Statistics Table --> */}
@@ -131,7 +182,20 @@ function Dashboard() {
   );
 }
 
-function TimerTable() {
+// Represents the entire table of timers
+function TimerTable(props) {
+  const {recipes, taskList, timerList, handleRemove} = props;
+
+  // for each timer, render a TimerRow
+  let timerRows = [];
+  if (timerList.length === 0) {
+    timerRows = [(<tr key="0"><td colSpan="5"><b>You currently have no tasks!</b></td></tr>)];
+  } else {
+    timerRows = timerList.map((timer, index) => {
+      return <TimerRow recipes={recipes} taskList={taskList} timer={timer} index={index} handleRemove={handleRemove} key={index} />
+    });
+  }
+
   return (
     <table className="table table-hover" aria-label="List of Current Tasks">
       <thead>
@@ -144,12 +208,308 @@ function TimerTable() {
         </tr>
       </thead>
       <tbody id="timer-body">
+        {timerRows}
       </tbody>
     </table>
   );
 }
 
-function AddTimer() {
+// Represents a single row in the table
+function TimerRow(props) {
+  const {recipes, taskList, timer, index, handleRemove} = props;
+
+  // TODO: add event handler for modal here
+
+  return (
+    <tr>
+      <td className="task-icon-text"> <Icon taskList={taskList} taskName={timer.task} /> </td>
+      <td className="item-text"> {timer.item} </td>
+      <td className="task-text"> {timer.task} </td>
+      <td className="loc-text"> {timer.location} </td>
+      <Time timer={timer} index={index} handleRemove={handleRemove} />
+    </tr>
+  )
+}
+
+// Represents a task icon
+function Icon(props) {
+  const {taskList, taskName} = props;
+
+  // If task list hasn't been fetched yet, don't return an image
+  if (taskList.length === 0) {
+    return null;
+  }
+
+  let iconObject = taskList.filter((obj) => {
+    return taskName.toLowerCase().includes(obj.taskName);
+  })[0];
+
+  return (
+    <img className="task-icon" src={iconObject.src} alt={iconObject.alt} title={iconObject.title}/>
+  )
+}
+
+// Handles the "Time Left" table cell
+function Time(props) {
+  const {timer, index, handleRemove} = props;
+
+  // Function to handle "remove" button click
+  const handleClick = () => {
+    handleRemove(index);
+  }
+
+  // Timer hook library - https://www.npmjs.com/package/react-timer-hook
+  useTimer({ expiryTimestamp: timer.endTime });
+
+  // Format timer string
+  let t = getTimeRemaining(timer.endTime);
+  let hourText = '';
+  if (t.hours !== 0) {
+      hourText = ('0' + t.hours).slice(-2) + ':';
+  }
+  let toDisplay = hourText +
+                   ('0' + t.minutes).slice(-2) + ':' +
+                   ('0' + t.seconds).slice(-2);
+
+  // If timer is already completed, render button rather than new clock
+  if (timer.endTime < new Date()) {
+    return (
+      <td className="time-text"><button className="btn" title="Click to remove timer" onClick={handleClick}> Done! </button></td>
+    )
+  } else {
+    return (
+      <td className="time-text">{toDisplay}</td>
+    )
+  }
+}
+
+// TIMER COUNTDOWN CODE - credit for getTimeRemaining() to Yaphi Berhanu and Nilson Jacques from SitePoint
+// Calculates the amount of time remaining
+// Returns an object representing the amount of time in terms of the total, hours, etc.
+function getTimeRemaining(endTime){
+  const total = Date.parse(endTime) - Date.parse(new Date());
+  const seconds = Math.floor( (total/1000) % 60 );
+  const minutes = Math.floor( (total/1000/60) % 60 );
+  const hours = Math.floor( (total/(1000*60*60)));
+
+  return { total, hours, minutes, seconds };
+}
+
+// Adds hours, minutes, and seconds to the current Date
+function getEndTime(hr, min, sec) {
+  // Calculate the amount of time, in ms, to add to the date
+  let timeToAdd = 1000 * getSeconds(hr, min, sec);
+  return new Date(new Date().getTime() + timeToAdd);
+}
+
+// Gets number of seconds from hours, minutes, seconds
+function getSeconds(hr, min, sec) {
+  return sec + 60 * (min + 60 * hr);
+}
+
+// Parses a time string in the format HH:MM:SS into an object of {hours: , minutes: , seconds: }
+function parseTimeString(timeString) {
+  let splitTime = timeString.split(":");
+  return {hours: parseInt(splitTime[0]),
+          minutes: parseInt(splitTime[1]),
+          seconds: parseInt(splitTime[2])};
+}
+
+// Represents the Add Timer form
+function AddTimer(props) {
+  const {recipes, taskList, handleAdd} = props;
+
+  // State
+  // for reference: {recipeIndex: -1, recipeName: "", stepNum: -1, taskName: "", location: "", hr: -1, min: -1, sec: -1}
+  const [newTimerInput, setNewTimerInput] = useState() // object storing information about the new timer
+  const [tasks, setTasks] = useState([]) // array storing tasks to be rendered in task select
+  const [locations, setLocations] = useState([]) // array storing locations to be rendered in locations select
+  const [taskDis, setTaskDis] = useState(true) // boolean that stores whether or not the task select should be disabled
+  const [locDis, setLocDis] = useState(true) // boolean that stores whether or not the location select should be disabled
+  const [itemVal, setItemVal] = useState("") // value that controls what is currently selected in item select
+  const [taskVal, setTaskVal] = useState("") // value that controls what is currently selected in task select
+  const [locVal, setLocVal] = useState("") // value that controls what is currently selected in location select
+  const [hrVal, setHrVal] = useState("") // value that controls what is shown in the expected hours elem
+  const [minVal, setMinVal] = useState("") // value that controls what is shown in the expected minutes elem
+  const [secVal, setSecVal] = useState("") // value that controls what is shown in the expected seconds elem
+  const [submitDis, setSubmitDis] = useState(false) // boolean that stores whether or not the form submit button should be disabled
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.target;
+
+    if (form.checkValidity() && checkDisabled()) {
+      // Add timer to list - re-render tables
+      handleAdd(newTimerInput);
+
+      // Reset form after submitting
+      resetForm();
+    } else {
+      // Disable form until valid
+      setSubmitDis(true);
+    }
+  }
+
+  // Checks if the task and location selectors are still disabled
+  // Returns false if still either selector is still disabled
+  const checkDisabled = function() {
+    return !taskDis && !locDis;
+  }
+
+  const resetForm = function() {
+    setTaskDis(true);
+    setTasks([]);
+    setTaskVal("");
+    setLocDis(true);
+    setLocations([]);
+    setLocVal("");
+    setItemVal("");
+    setHrVal("");
+    setMinVal("");
+    setSecVal("");
+  }
+
+  // Populate item select
+  const itemSelect = recipes.map((recipe, index) => {
+    return <option value={index} key={index}> {recipe.recipeName} </option>
+  });
+
+  // Populate task select
+  const taskSelect = tasks.map((task, index) => {
+    return <option value={index} key={index}> {task} </option>
+  });
+
+  // Populate location select
+  const locationSelect = locations.map((location, index) => {
+    return <option value={index} key={index}> {location} </option>
+  });
+
+  const handleItemChange = (event) => {
+    // Check if default isn't selected
+    let itemNum = event.target.value;
+    setItemVal(itemNum);
+
+    if (itemNum !== "") {
+      // Select recipe
+      const recipe = recipes[itemNum];
+
+      // Update newTimerInput - new task should have recipe index and name
+      const updatedNewTimer = { ...newTimerInput };
+      updatedNewTimer.recipeIndex = itemNum;
+      updatedNewTimer.recipeName = recipe.recipeName;
+      setNewTimerInput(updatedNewTimer);
+
+      // Update tasks - tasks should be populated with recipe's steps
+      const updatedTasks = recipe.steps.map((step) => {
+          return step.task
+      });
+      setTasks(updatedTasks);
+
+      // Update task select - task select element to false
+      setTaskDis(false);
+      setTaskVal("");
+    } else {
+      // Update tasks - disable task select and clear tasks
+      setTaskDis(true);
+      setTasks([]);
+    }
+
+    // Update locations - disable location select and clear locations
+    setLocDis(true);
+    setLocations([]);
+  };
+
+  const handleTaskChange = (event) => {
+    // Check if default isn't selected
+    let taskNum = event.target.value;
+    setTaskVal(taskNum);
+
+    if (taskNum !== "") {
+      // Select location from taskList
+      let taskObj = taskList.filter((obj) => {
+          return(event.target.selectedOptions[0].text.toLowerCase().includes(obj.taskName));
+      })[0];
+
+      // Update newTimerInput - new task should have step number and task name
+      const updatedNewTimer = { ...newTimerInput };
+      updatedNewTimer.stepNum = taskNum; // for internal use
+      updatedNewTimer.taskName = event.target.selectedOptions[0].text;
+      setNewTimerInput(updatedNewTimer);
+
+      // Update locations
+      const updatedLocs = taskObj.locations.map((location) => {
+          return location;
+      });
+      setLocations(updatedLocs);
+
+      // Update location select - enable location select
+      setLocDis(false);
+      setLocVal("");
+    } else {
+      // Update locations - disable location select
+      setLocDis(true);
+      setLocations([]);
+    }
+  };
+
+  const handleLocationChange = (event) => {
+    // Check if default isn't selected
+    let locNum = event.target.value;
+    setLocVal(locNum);
+
+    if (locNum !== "") {
+      // Update newTimerInput - new task should have location name
+      const updatedNewTimer = { ...newTimerInput };
+      updatedNewTimer.location = event.target.selectedOptions[0].text;
+
+      // Update time inputs
+      let timeString = recipes[updatedNewTimer.recipeIndex].steps[updatedNewTimer.stepNum].time;
+      let splitTime = parseTimeString(timeString);
+      setHrVal(splitTime.hours);
+      setMinVal(splitTime.minutes);
+      setSecVal(splitTime.seconds);
+
+      // Update newTimerInput - new task should have expected time
+      updatedNewTimer.hr = splitTime.hours;
+      updatedNewTimer.min = splitTime.minutes;
+      updatedNewTimer.sec = splitTime.seconds;
+      setNewTimerInput(updatedNewTimer);
+
+      // Enable form button
+      setSubmitDis(false);
+    }
+  }
+
+  const handleHrInput = (event) => {
+    // Update controlled component
+    setHrVal(event.target.value);
+
+    // Update newTimerInput - new task should have expected hours
+    const updatedNewTimer = { ...newTimerInput };
+    updatedNewTimer.hr = event.target.value;
+    setNewTimerInput(updatedNewTimer);
+  };
+
+  const handleMinInput = (event) => {
+    // Update controlled component
+    setMinVal(event.target.value);
+
+    // Update newTimerInput - new task should have expected minutes
+    const updatedNewTimer = { ...newTimerInput };
+    updatedNewTimer.min = event.target.value;
+    setNewTimerInput(updatedNewTimer);
+  };
+
+  const handleSecInput = (event) => {
+    // Update controlled component
+    setSecVal(event.target.value);
+
+    // Update newTimerInput - new task should have expected seconds
+    const updatedNewTimer = { ...newTimerInput };
+    updatedNewTimer.sec = event.target.value;
+    setNewTimerInput(updatedNewTimer);
+  };
+
   return (
     <div className="card">
       {/* <!-- Card Title and Subtitle --> */}
@@ -158,45 +518,48 @@ function AddTimer() {
         <p className="card-subtitle">Select an item to begin:</p>
       </div>
       {/* <!-- Card Body (Forms and Button) --> */}
-      <form className="container-fluid">
+      <form onSubmit={handleSubmit} className="container-fluid">
         <div className="row align-items-center">
           {/* <!-- Forms stack when screen is small and large --> */}
           <div className="col-sm-12 col-md-4 col-lg-12 my-3">
-            <select id="item-select" className="form-control" aria-label="Select recipe item" required>
+            <select value={itemVal} onChange={handleItemChange} id="item-select" className="form-control" aria-label="Select recipe item" required>
               <option value="" defaultValue>Pick an Item...</option>
+              {itemSelect}
             </select>
           </div>
 
           <div className="col-sm-12 col-md-4 col-lg-12 my-3">
-            <select id="task-select" className="form-control" aria-label="Select recipe task" required disabled>
+            <select value={taskVal} onChange={handleTaskChange} id="task-select" className="form-control" aria-label="Select recipe task" required disabled={taskDis}>
               <option value="" defaultValue>Pick a Task...</option>
+              {taskSelect}
             </select>
           </div>
 
           <div className="col-sm-12 col-md-4 col-lg-12 my-3">
-            <select id="loc-select" className="form-control" aria-label="Select location" required disabled>
+            <select value={locVal} onChange={handleLocationChange} id="loc-select" className="form-control" aria-label="Select location" required disabled={locDis}>
               <option value="" defaultValue>Pick a Location...</option>
+              {locationSelect}
             </select>
           </div>
 
           <div className="col-sm-12 mt-2">Expected Time:</div>
           <div className="col-sm-12 mt-2 form-group form-inline timer-input" role="timer">
             <div className="col-4 pl-0 pr-2">
-              <input id="exp-hr" type="number" name="hours" min="0" max="24" className="form-control w-100" aria-label="hours remaining" required></input>
+              <input onInput={handleHrInput} value={hrVal} id="exp-hr" type="number" name="hours" min="0" max="24" className="form-control w-100" aria-label="hours remaining" required></input>
               <label htmlFor="exp-hr" className="w-100">hr</label>
             </div>
             <div className="col-4 px-2">
-              <input id="exp-min" type="number" name="minutes" min="0" max="59" className="form-control w-100" aria-label="minutes remaining" required></input>
+              <input onInput={handleMinInput} value={minVal} id="exp-min" type="number" name="minutes" min="0" max="59" className="form-control w-100" aria-label="minutes remaining" required></input>
               <label htmlFor="exp-min" className="w-100">min</label>
             </div>
             <div className="col-4 pr-0 pl-2">
-              <input id="exp-sec" type="number" name="seconds" min="0" max="59" className="form-control w-100" aria-label="seconds remaining" required></input>
+              <input onInput={handleSecInput} value={secVal} id="exp-sec" type="number" name="seconds" min="0" max="59" className="form-control w-100" aria-label="seconds remaining" required></input>
               <label htmlFor="exp-sec" className="w-100">sec</label>
             </div>
           </div>
 
           <div className="col-12 mb-3 text-center">
-            <button className="btn timer-btn" role="button" type="submit">Confirm Timer</button>
+            <button className="btn timer-btn" type="submit" disabled={submitDis}>Confirm Timer</button>
           </div>
         </div>
       </form>
@@ -204,6 +567,7 @@ function AddTimer() {
   );
 }
 
+// Represents the stats table
 function StatsTable() {
   return (
     <table className="table mt-3" aria-label="list of baking statistics">
