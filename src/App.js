@@ -288,9 +288,9 @@ function Time(props) {
 // Returns an object representing the amount of time in terms of the total, hours, etc.
 function getTimeRemaining(endTime){
   const total = Date.parse(endTime) - Date.parse(new Date());
-  const seconds = Math.floor( (total/1000) % 60 );
-  const minutes = Math.floor( (total/1000/60) % 60 );
-  const hours = Math.floor( (total/(1000*60*60)));
+  const seconds = Math.floor((total / 1000) % 60);
+  const minutes = Math.floor((total / 1000 / 60) % 60);
+  const hours = Math.floor((total / (1000*60*60)));
 
   return { total, hours, minutes, seconds };
 }
@@ -486,7 +486,7 @@ function AddTimer(props) {
 
     // Update newTimerInput - new task should have expected hours
     const updatedNewTimer = { ...newTimerInput };
-    updatedNewTimer.hr = event.target.value;
+    updatedNewTimer.hr = parseInt(event.target.value);
     setNewTimerInput(updatedNewTimer);
   };
 
@@ -496,7 +496,7 @@ function AddTimer(props) {
 
     // Update newTimerInput - new task should have expected minutes
     const updatedNewTimer = { ...newTimerInput };
-    updatedNewTimer.min = event.target.value;
+    updatedNewTimer.min = parseInt(event.target.value);
     setNewTimerInput(updatedNewTimer);
   };
 
@@ -506,7 +506,7 @@ function AddTimer(props) {
 
     // Update newTimerInput - new task should have expected seconds
     const updatedNewTimer = { ...newTimerInput };
-    updatedNewTimer.sec = event.target.value;
+    updatedNewTimer.sec = parseInt(event.target.value);
     setNewTimerInput(updatedNewTimer);
   };
 
