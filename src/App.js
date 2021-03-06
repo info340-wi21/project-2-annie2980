@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {Route, Switch, Link, Redirect, NavLink} from 'react-router-dom';
+import {Route, Switch, Redirect, NavLink} from 'react-router-dom';
 import { useTimer } from 'react-timer-hook';
+import Modal from 'react-bootstrap/Modal';
 import 'whatwg-fetch';
 import RecipeList from './Recipes';
 import About from './About';
@@ -41,6 +42,27 @@ function App() {
       })
   }, []);
 
+  // Modal states
+  const [modalShow, setModalShow] = useState(false);
+  const [recipe, setRecipe] = useState({});
+  const [location, setLocation] = useState({});
+  const [task, setTask] = useState({});
+
+  const showModal = () => {
+    setModalShow(true);
+  }
+
+  const hideModal = () => {
+    setModalShow(false);
+  }
+
+  // Current recipe for modal
+  const clickedOnRecipe = (currentRecipe, location, task) => {
+    setRecipe(currentRecipe);
+    setLocation(location);
+    setTask(task);
+  }
+
   return (
 		<div>
 			{/* <!-- Navigation Bar --> */}
@@ -51,11 +73,12 @@ function App() {
       <main>
         <div>
           <Switch>
-            <Route exact path="/"> <Dashboard timerList={timerList} setTimerList={setTimerList} recipes={recipes} taskList={taskList} /> </Route>
+            <Route exact path="/"> <Dashboard timerList={timerList} setTimerList={setTimerList} recipes={recipes} taskList={taskList} recipeCallback={clickedOnRecipe} showModal={showModal} /> </Route>
             <Route path="/recipes"> <RecipeList /> </Route>
             <Route path="/about"> <About /> </Route>
             <Redirect to="/" />
           </Switch>
+          <RecipeModal show={modalShow} onHide={hideModal} recipe={recipe} location={location} task={task}/>
         </div>
       </main>
       
@@ -98,7 +121,7 @@ function NavBar() {
 
 // Represents the Dashboard "page"
 function Dashboard(props) {
-  const {timerList, setTimerList, recipes, taskList} = props;
+  const {timerList, setTimerList, recipes, taskList, recipeCallback, showModal} = props;
 
   // Function to handle removal of a timer from timerList
   const handleRemove = function(timerRowIndex) {
@@ -162,7 +185,7 @@ function Dashboard(props) {
             </h1>
             <p>Your current tasks are listed below:</p>
           </div>
-          <TimerTable recipes={recipes} taskList={taskList} timerList={timerList} handleRemove={handleRemove} />
+          <TimerTable recipes={recipes} taskList={taskList} timerList={timerList} handleRemove={handleRemove} recipeCallback={recipeCallback} showModal={showModal}/>
           <div className="container-fluid">
             <p className="click-more">Click on the item to see more information!</p>
           </div>
@@ -184,7 +207,7 @@ function Dashboard(props) {
 
 // Represents the entire table of timers
 function TimerTable(props) {
-  const {recipes, taskList, timerList, handleRemove} = props;
+  const {recipes, taskList, timerList, handleRemove, recipeCallback, showModal} = props;
 
   // for each timer, render a TimerRow
   let timerRows = [];
@@ -192,7 +215,7 @@ function TimerTable(props) {
     timerRows = [(<tr key="0"><td colSpan="5"><b>You currently have no tasks!</b></td></tr>)];
   } else {
     timerRows = timerList.map((timer, index) => {
-      return <TimerRow recipes={recipes} taskList={taskList} timer={timer} index={index} handleRemove={handleRemove} key={index} />
+      return <TimerRow recipes={recipes} taskList={taskList} timer={timer} index={index} handleRemove={handleRemove} recipeCallback={recipeCallback} showModal={showModal} key={index} />
     });
   }
 
@@ -216,19 +239,84 @@ function TimerTable(props) {
 
 // Represents a single row in the table
 function TimerRow(props) {
-  const {recipes, taskList, timer, index, handleRemove} = props;
+  const {recipes, taskList, timer, index, handleRemove, recipeCallback, showModal} = props;
 
-  // TODO: add event handler for modal here
+  // Shows modal on click
+  const handleItemClick = (event) => {
+    recipeCallback(recipes[timer.recipeIndex], timer.location, timer.task);
+    showModal();
+  }
 
   return (
     <tr>
       <td className="task-icon-text"> <Icon taskList={taskList} taskName={timer.task} /> </td>
-      <td className="item-text"> {timer.item} </td>
+      <td className="item-text" onClick={handleItemClick}> {timer.item} </td>
       <td className="task-text"> {timer.task} </td>
       <td className="loc-text"> {timer.location} </td>
       <Time timer={timer} index={index} handleRemove={handleRemove} />
     </tr>
   )
+}
+
+// Recipe modal
+function RecipeModal(props) {
+  const {show, onHide, recipe, location, task} = props;
+
+  return (
+    <Modal show={show} onHide={onHide} centered>
+      <Modal.Header>
+        <Modal.Title>{recipe.recipeName}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <RecipeText steps={recipe.steps} location={location} task={task}/>
+      </Modal.Body>
+      <Modal.Footer>
+        <button className="btn" onClick={onHide}>Close</button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
+// Recipe text for modal
+function RecipeText(props) {
+  const {steps, location, task} = props;
+
+  let recipeSteps = steps.map((step) => {
+    return <Step step={step} key={step.task}/>
+  })
+
+  return (
+    <div>
+      <p>
+        <b>Current Location: </b> {location}
+      </p>
+      <p>
+        <b>Current Task: </b> {task}
+      </p>
+      {recipeSteps}
+    </div>
+  );
+}
+
+// Specific step for recipe text in modal
+function Step(props) {
+  const {step} = props;
+  let taskTime = parseTimeString(step.time);
+
+  return (
+    <div>
+      <hr title={"Start of " + step.task + " Step"}></hr>
+      <p>
+        <b>Task: </b> {step.task}
+      </p>
+      <p>
+        <b>Total Time: </b> {taskTime.hours + " hr " + taskTime.minutes + " min"}
+      </p>
+      <p>
+        <b>Instructions: </b> {step.description}
+      </p>
+    </div>
+  );
 }
 
 // Represents a task icon
