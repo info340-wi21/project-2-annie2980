@@ -11,11 +11,13 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 // - HIGH PRIORITY
 //      [x] Fetch external data
 //      [x] Add recipe modal (see line 220 in App.js)
-//      [ ] For Kerri: modularize everything!!
+//      [x] For Kerri: modularize everything!!
+//          - I tried my best
+//      [ ] For Kerri: Add props comments to aid readability
 //      [ ] For Annie: use imported data and props for Recipes.js
 // - MEDIUM PRIORITY
-//      [ ] Add a delete timer option?
-//          - What would be the interaction? Right-click on the row and then a modal pops up?
+//      [X] Add a delete timer option?
+//          - Two options to pick from: added to recipe modal and click on timer modal
 // - LOW PRIORITY
 //      [ ] Get recipe search working or get rid of search input and button
 //      [ ] Add images to the recipe modal (will need to add file location in json file?) <- yeah probably

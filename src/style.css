@@ -61,6 +61,11 @@ td.time-text {
 
 .time-text {
   text-align: right;
+  cursor: pointer;
+}
+
+.time-complete {
+  cursor: default;
 }
 
 .task-icon {
@@ -77,6 +82,10 @@ td.time-text {
   background-color: #4fa7a0;
   color: white;
   font-weight: 500;
+}
+
+.delete-btn {
+  background-color: #c72121;
 }
 
 .click-more {
