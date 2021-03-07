@@ -21,6 +21,7 @@ function RecipeList(props) {
     setRecipe(currentRecipe);
   }
 
+  // Sort recipes by recipe name
   recipes.sort((recipeA, recipeB) => {
     let recipeNameA = recipeA.recipeName.toLowerCase();
     let recipeNameB = recipeB.recipeName.toLowerCase();
