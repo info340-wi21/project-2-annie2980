@@ -14,11 +14,12 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 //      [x] For Kerri: modularize everything!!
 //          - I tried my best
 //      [ ] For Kerri: Add props comments to aid readability
-//      [ ] For Annie: use imported data and props for Recipes.js
+//      [x] For Annie: use imported data and props for Recipes.js
 // - MEDIUM PRIORITY
 //      [X] Add a delete timer option?
 //          - Two options to pick from: added to recipe modal and click on timer modal
 // - LOW PRIORITY
 //      [ ] Get recipe search working or get rid of search input and button
+//      [ ] Add recipe modal to recipe card
 //      [ ] Add images to the recipe modal (will need to add file location in json file?) <- yeah probably
 //      [ ] Add more icons for tasks

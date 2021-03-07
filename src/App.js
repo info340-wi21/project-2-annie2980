@@ -5,7 +5,7 @@ import RecipeList from './Recipes';
 import About from './About';
 import { AddTimer } from './AddTimerDash';
 import { StatsTable } from './StatsTable';
-import { RecipeModal, DeleteTimerModal } from './Modals';
+import { TimerRecipeModal, DeleteTimerModal } from './Modals';
 import { TimerTable } from './TimerTable';
 
 function App() {
@@ -60,7 +60,7 @@ function App() {
         <div>
           <Switch>
             <Route exact path="/"> <Dashboard timerList={timerList} setTimerList={setTimerList} recipes={recipes} taskList={taskList} totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} setTotalTime={setTotalTime} setTotalBakes={setTotalBakes} /> </Route>
-            <Route path="/recipes"> <RecipeList /> </Route>
+            <Route path="/recipes"> <RecipeList recipes={recipes}/> </Route>
             <Route path="/about"> <About /> </Route>
             <Redirect to="/" />
           </Switch>
@@ -71,7 +71,7 @@ function App() {
         {/* <!-- Copyright --> */}
         <div className="copyright">
           <p>
-            <a href="https://github.com/info340-wi21/project-1-annie2980" rel="noreferrer" target="_blank">GitHub Repo</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="https://github.com/info340-wi21/project-2-annie2980" rel="noreferrer" target="_blank">GitHub Repo</a>&nbsp;&nbsp;|&nbsp;&nbsp;
             <a href="http://www.washington.edu" rel="noreferrer" target="_blank">University of Washington</a>&nbsp;&nbsp;|&nbsp;&nbsp;
             &copy; {new Date().getFullYear()} Annie Liu and Kerri Lee
           </p>
@@ -217,6 +217,7 @@ function Dashboard(props) {
             </div>
             <TimerTable recipes={recipes} taskList={taskList} timerList={timerList} handleRemove={handleRemove} recipeCallback={clickedOnRecipe} showModal={showModal} handleDeleteShow={handleDeleteShow} />
             <div className="container-fluid">
+              <p className="tap-more">Tap on the item to see more information!</p>
               <p className="click-more">Click on the item to see more information!</p>
             </div>
           </section>
@@ -233,7 +234,7 @@ function Dashboard(props) {
         </div>
       </div>
       {/* <!-- Recipe Info Modal --> */}
-      <RecipeModal show={modalShow} onHide={hideModal} recipe={recipe} location={location} task={task} handleRemoveAndClose={handleRemoveAndClose}/>
+      <TimerRecipeModal show={modalShow} onHide={hideModal} recipe={recipe} location={location} task={task} handleRemoveAndClose={handleRemoveAndClose}/>
       {/* <!-- Delete Timer Modal --> */}
       <DeleteTimerModal show={showDelete} onHide={handleDeleteClose} handleRemoveAndClose={handleRemoveAndClose} recipe={recipe}/>
     </div>

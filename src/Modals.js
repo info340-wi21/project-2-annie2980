@@ -2,12 +2,13 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 // Recipe modal
-export function RecipeModal(props) {
+export function TimerRecipeModal(props) {
   /*
     Props:
     - show: boolean representing whether the modal is showing or not
     - onHide: callback function for hiding the modal
     - recipe: recipe object to be shown in the modal
+    - location: current location of task
     - task: current task being timed
     - handleRemoveAndClose(bool): callback function for removing the current timer from the list
   */
@@ -20,12 +21,46 @@ export function RecipeModal(props) {
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header>
         <Modal.Title>{recipe.recipeName}</Modal.Title>
+        <button className="btn delete-btn" onClick={handleClick}>Delete Timer</button>
       </Modal.Header>
       <Modal.Body>
         <RecipeText steps={recipe.steps} location={location} task={task}/>
       </Modal.Body>
       <Modal.Footer>
-        <button className="btn delete-btn" onClick={handleClick}>Delete Timer</button>
+        <button className="btn" onClick={onHide}>Close Recipe</button>
+      </Modal.Footer>
+    </Modal>
+  );
+}
+
+// Recipe modal for recipe card
+export function RecipeModal(props) {
+  /*
+    Props:
+    - show: boolean representing whether the modal is showing or not
+    - onHide: callback function for hiding the modal
+    - recipe: recipe object to be shown in the modal
+  */
+  const {show, onHide, recipe} = props;
+  
+  let recipeTime = parseTimeString(recipe.totalTime);
+
+  let recipeSteps = recipe.steps.map((step) => {
+    return <Step step={step} key={step.task}/>
+  })
+
+  return (
+    <Modal show={show} onHide={onHide} centered>
+      <Modal.Header>
+        <Modal.Title>{recipe.recipeName}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>
+          <b>Total Time: </b> {recipeTime.hours + " hr " + recipeTime.minutes + " min"}
+        </p>
+        {recipeSteps}
+      </Modal.Body>
+      <Modal.Footer>
         <button className="btn" onClick={onHide}>Close Recipe</button>
       </Modal.Footer>
     </Modal>
@@ -65,7 +100,7 @@ function Step(props) {
         <b>Task: </b> {step.task}
       </p>
       <p>
-        <b>Total Time: </b> {taskTime.hours + " hr " + taskTime.minutes + " min"}
+        <b>Task Time: </b> {taskTime.hours + " hr " + taskTime.minutes + " min"}
       </p>
       <p>
         <b>Instructions: </b> {step.description}
