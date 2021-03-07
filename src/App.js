@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Route, Switch, Redirect, NavLink} from 'react-router-dom';
+import { Navbar, Nav } from 'react-bootstrap';
 import 'whatwg-fetch';
 import RecipeList from './Recipes';
 import About from './About';
@@ -53,7 +54,7 @@ function App() {
 		<div>
 			{/* <!-- Navigation Bar --> */}
       <header>
-        <NavBar />
+        <NavigationBar />
       </header>
 
       <main>
@@ -81,26 +82,22 @@ function App() {
   );
 }
 
-function NavBar() {
+function NavigationBar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light">
-      <div className="container-fluid">
-        <NavLink className="navbar-brand" to="/">
-          <img src="img/favicon-no-shadow.png" alt="app-icon" className="d-inline-block align-middle mr-3" title="Bakery by Goran Babic from Iconfinder"/>
-          BakeTime
-        </NavLink>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div className="navbar-nav">
-            <NavLink className="nav-link" exact to="/" >Dashboard</NavLink>
-            <NavLink className="nav-link" to="/recipes" >Recipes</NavLink>
-            <NavLink className="nav-link" to="/about" >About</NavLink>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <Navbar className="navbar" expand="md">
+      <NavLink className="navbar-brand" to="/">
+        <img src="img/favicon-no-shadow.png" alt="app-icon" className="d-inline-block align-middle mr-3" title="Bakery by Goran Babic from Iconfinder"/>
+        BakeTime
+      </NavLink>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav>
+          <NavLink className="nav-link" exact to="/" >Dashboard</NavLink>
+          <NavLink className="nav-link" to="/recipes" >Recipes</NavLink>
+          <NavLink className="nav-link" to="/about" >About</NavLink>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 }
 
