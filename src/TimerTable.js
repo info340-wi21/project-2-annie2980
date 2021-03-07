@@ -11,9 +11,8 @@ export function TimerTable(props) {
     - handleRemove(rowIndex): callback function to remove timer from timerList
     - recipeCallback(currentRecipe, location, task, timerIndex): callback function to set recipe modal state
     - showModal(): callback function to show the recipe modal
-    - handleDeleteShow(rowIndex): callback function to show the delete timer modal
   */
-  const {recipes, taskList, timerList, handleRemove, recipeCallback, showModal, handleDeleteShow} = props;
+  const {recipes, taskList, timerList, handleRemove, recipeCallback, showModal} = props;
   
   // for each timer, render a TimerRow
   let timerRows = [];
@@ -21,7 +20,7 @@ export function TimerTable(props) {
     timerRows = [(<tr key="0"><td colSpan="5"><b>You currently have no tasks!</b></td></tr>)];
   } else {
     timerRows = timerList.map((timer, index) => {
-      return <TimerRow recipes={recipes} taskList={taskList} timer={timer} index={index} handleRemove={handleRemove} recipeCallback={recipeCallback} showModal={showModal} handleDeleteShow={handleDeleteShow} key={index} />
+      return <TimerRow recipes={recipes} taskList={taskList} timer={timer} index={index} handleRemove={handleRemove} recipeCallback={recipeCallback} showModal={showModal} key={index} />
     });
   }
 
@@ -45,7 +44,7 @@ export function TimerTable(props) {
 
 // Represents a single row in the table
 function TimerRow(props) {
-  const {recipes, taskList, timer, index, handleRemove, recipeCallback, showModal, handleDeleteShow} = props;
+  const {recipes, taskList, timer, index, handleRemove, recipeCallback, showModal} = props;
 
   // Shows modal on click
   const handleItemClick = () => {
@@ -60,7 +59,7 @@ function TimerRow(props) {
       <td className="item-text" onClick={handleItemClick}> {timer.item} </td>
       <td className="task-text"> {timer.task} </td>
       <td className="loc-text"> {timer.location} </td>
-      <Time timer={timer} index={index} handleRemove={handleRemove} handleDeleteShow={handleDeleteShow} />
+      <Time timer={timer} index={index} handleRemove={handleRemove} />
     </tr>
   )
 }
@@ -85,16 +84,11 @@ function Icon(props) {
 
 // Handles the "Time Left" table cell
 function Time(props) {
-  const {timer, index, handleRemove, handleDeleteShow} = props;
+  const {timer, index, handleRemove} = props;
 
   // Function to handle "remove" button click
   const handleRemoveClick = () => {
     handleRemove(index);
-  }
-
-  // Function to handle clicking on the row
-  const handleRowClick = () => {
-    handleDeleteShow(index);
   }
 
   // Timer hook library - https://www.npmjs.com/package/react-timer-hook
@@ -111,11 +105,11 @@ function Time(props) {
   // If timer is already completed, render button rather than new clock
   if (timer.endTime < new Date()) {
     return (
-      <td className="time-text time-complete"><button className="btn" title="Click to remove timer" onClick={handleRemoveClick}> Done! </button></td>
+      <td className="time-text"><button className="btn" title="Click to remove timer" onClick={handleRemoveClick}> Done! </button></td>
     )
   } else {
     return (
-      <td className="time-text" title="Click to remove timer" onClick={handleRowClick}>{toDisplay}</td>
+      <td className="time-text">{toDisplay}</td>
     )
   }
 }

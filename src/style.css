@@ -61,11 +61,6 @@ td.time-text {
 
 .time-text {
   text-align: right;
-  cursor: pointer;
-}
-
-.time-complete {
-  cursor: default;
 }
 
 .task-icon {

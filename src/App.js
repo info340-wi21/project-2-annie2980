@@ -5,7 +5,7 @@ import RecipeList from './Recipes';
 import About from './About';
 import { AddTimer } from './AddTimerDash';
 import { StatsTable } from './StatsTable';
-import { TimerRecipeModal, DeleteTimerModal } from './Modals';
+import { TimerRecipeModal } from './Modals';
 import { TimerTable } from './TimerTable';
 
 function App() {
@@ -113,6 +113,7 @@ function Dashboard(props) {
   const [recipe, setRecipe] = useState({});
   const [location, setLocation] = useState({});
   const [task, setTask] = useState({});
+  const [clickedTimerIndex, setTimerIndex] = useState(0);
 
   const showModal = () => {
     setModalShow(true);
@@ -127,29 +128,14 @@ function Dashboard(props) {
     setRecipe(currentRecipe);
     setLocation(location);
     setTask(task);
-    // KERRI ADDED CODE HERE
     setTimerIndex(timerIndex);
   }
 
   // Callback for removing recipe using recipe modal or deleteTimerModal
-  const handleRemoveAndClose = function(isRecipeModal) {
+  const handleRemoveAndClose = function() {
     handleRemove(clickedTimerIndex);
     setTimerIndex(0);
-    isRecipeModal ? hideModal() : handleDeleteClose();
-  }
-
-  // State to handle deleteTimerModal
-  const [showDelete, setShowDelete] = useState(false);
-  const [clickedTimerIndex, setTimerIndex] = useState(0);
-
-  const handleDeleteClose = () => {
-    setTimerIndex(0);
-    setShowDelete(false);
-  }
-  const handleDeleteShow = (index) => {
-    setRecipe(recipes[timerList[index].recipeIndex]);
-    setTimerIndex(index);
-    setShowDelete(true);
+    hideModal();
   }
 
   // Function to handle removal of a timer from timerList
@@ -215,7 +201,7 @@ function Dashboard(props) {
               </h1>
               <p>Your current tasks are listed below:</p>
             </div>
-            <TimerTable recipes={recipes} taskList={taskList} timerList={timerList} handleRemove={handleRemove} recipeCallback={clickedOnRecipe} showModal={showModal} handleDeleteShow={handleDeleteShow} />
+            <TimerTable recipes={recipes} taskList={taskList} timerList={timerList} handleRemove={handleRemove} recipeCallback={clickedOnRecipe} showModal={showModal} />
             <div className="container-fluid">
               <p className="tap-more">Tap on the item to see more information!</p>
               <p className="click-more">Click on the item to see more information!</p>
@@ -235,8 +221,6 @@ function Dashboard(props) {
       </div>
       {/* <!-- Recipe Info Modal --> */}
       <TimerRecipeModal show={modalShow} onHide={hideModal} recipe={recipe} location={location} task={task} handleRemoveAndClose={handleRemoveAndClose}/>
-      {/* <!-- Delete Timer Modal --> */}
-      <DeleteTimerModal show={showDelete} onHide={handleDeleteClose} handleRemoveAndClose={handleRemoveAndClose} recipe={recipe}/>
     </div>
   );
 }
