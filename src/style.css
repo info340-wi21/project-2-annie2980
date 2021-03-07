@@ -156,6 +156,10 @@ input[type=number] {
   margin-top: 0.9rem;
 }
 
+.recipe-card {
+  cursor: pointer;
+}
+
 /* About Properties */
 .subtitle {
   font-weight: 400;

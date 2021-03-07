@@ -19,7 +19,6 @@ function RecipeList(props) {
   // Current recipe for modal
   const clickedOnRecipe = (currentRecipe) => {
     setRecipe(currentRecipe);
-    console.log(currentRecipe);
   }
 
   recipes.sort((recipeA, recipeB) => {
@@ -49,7 +48,7 @@ function RecipeList(props) {
         </div>
         
       </div>
-      {/* <RecipeModal show={modalShow} onHide={hideModal} recipe={recipe}/> */}
+      <RecipeModal show={modalShow} onHide={hideModal} recipe={recipe}/>
     </div>
   );
 }
@@ -65,9 +64,9 @@ function RecipeCard(props) {
   let recipeTime = parseTimeString(recipe.totalTime);
 
   return (
-    <div className="col-md-6 col-lg-4 col-xl-3 d-flex" onClick={handleClick}>
+    <div className="col-md-6 col-lg-4 col-xl-3 d-flex" >
       <div className="card mt-4">
-        <div className="card-body">
+        <div className="card-body recipe-card" onClick={handleClick}>
           <div className="row">
             <div>
               <img className="card-img-top" src={recipe.src} alt={recipe.recipeName}/>

@@ -19,7 +19,6 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 //      [X] Add a delete timer option?
 //          - Two options to pick from: added to recipe modal and click on timer modal
 // - LOW PRIORITY
-//      [ ] Get recipe search working or get rid of search input and button
-//      [ ] Add recipe modal to recipe card
-//      [ ] Add images to the recipe modal (will need to add file location in json file?) <- yeah probably
+//      [ ] Get recipe search working (will do this for the final)
+//      [x] Add recipe modal to recipe card
 //      [ ] Add more icons for tasks

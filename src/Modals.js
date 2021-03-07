@@ -17,11 +17,11 @@ export function TimerRecipeModal(props) {
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header>
-        <Modal.Title>{recipe.recipeName}</Modal.Title>
+        <Modal.Title className="modal-title">{recipe.recipeName}</Modal.Title>
         <button className="btn delete-btn" onClick={handleRemoveAndClose}>Delete Timer</button>
       </Modal.Header>
       <Modal.Body>
-        <RecipeText steps={recipe.steps} location={location} task={task}/>
+        <TimerRecipeText steps={recipe.steps} location={location} task={task}/>
       </Modal.Body>
       <Modal.Footer>
         <button className="btn" onClick={onHide}>Close Recipe</button>
@@ -39,24 +39,14 @@ export function RecipeModal(props) {
     - recipe: recipe object to be shown in the modal
   */
   const {show, onHide, recipe} = props;
-  // Error occurs here because recipe.totalTime is undefined
-  let recipeTime = parseTimeString(recipe.totalTime);
-
-  // Also here because recipe.steps is undefined
-  let recipeSteps = recipe.steps.map((step) => {
-    return <Step step={step} key={step.task}/>
-  })
 
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header>
-        <Modal.Title>{recipe.recipeName}</Modal.Title>
+        <Modal.Title className="modal-title">{recipe.recipeName}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>
-          <b>Total Time: </b> {recipeTime.hours + " hr " + recipeTime.minutes + " min"}
-        </p>
-        {recipeSteps}
+        <RecipeText recipe={recipe}/>
       </Modal.Body>
       <Modal.Footer>
         <button className="btn" onClick={onHide}>Close Recipe</button>
@@ -66,7 +56,7 @@ export function RecipeModal(props) {
 }
 
 // Recipe text for modal
-function RecipeText(props) {
+function TimerRecipeText(props) {
   const {steps, location, task} = props;
 
   let recipeSteps = steps.map((step) => {
@@ -80,6 +70,34 @@ function RecipeText(props) {
       </p>
       <p>
         <b>Current Task: </b> {task}
+      </p>
+      {recipeSteps}
+    </div>
+  );
+}
+
+// Recipe text for modal
+function RecipeText(props) {
+  const {recipe} = props;
+
+  let recipePrepTime = parseTimeString(recipe.prepTime);
+  let recipeCookTime = parseTimeString(recipe.cookTime);
+  let recipeTotalTime = parseTimeString(recipe.totalTime);
+
+  let recipeSteps = recipe.steps.map((step) => {
+    return <Step step={step} key={step.task}/>
+  })
+
+  return (
+    <div>
+      <p>
+        <b>Prep Time: </b> {recipePrepTime.hours + " hr " + recipePrepTime.minutes + " min"}
+      </p>
+      <p>
+        <b>Cook Time: </b> {recipeCookTime.hours + " hr " + recipeCookTime.minutes + " min"}
+      </p>
+      <p>
+        <b>Total Time: </b> {recipeTotalTime.hours + " hr " + recipeTotalTime.minutes + " min"}
       </p>
       {recipeSteps}
     </div>
