@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {Route, Switch, Redirect, NavLink} from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import firebase from 'firebase/app';
+import 'firebase/auth'
 import 'whatwg-fetch';
 import RecipeList from './Recipes';
 import About from './About';
@@ -9,7 +12,30 @@ import { StatsTable } from './StatsTable';
 import { TimerRecipeModal } from './Modals';
 import { TimerTable } from './TimerTable';
 
+// FirebaseUI config
+const uiConfig = {
+  // Which sign-in providers to use
+  signInOptions: [
+    {
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      requiredDisplayName: true
+    },
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID
+  ],
+  // page won't show account chooser
+  credentialHelper: 'none',
+  // use popup instead of redirect for external sign-in methods
+  signInFlow: 'popup',
+  callbacks: {
+    // avoid redirects after sign-in
+    signInSuccessWithAuthResult: () => false,
+  },
+}
+
 function App() {
+  // Authentication state
+  const [user, setUser] = useState(undefined);
+
   // State value of an array of current timers
   const [timerList, setTimerList] = useState([
     {recipeIndex: 0, item: "Apple Pie", task: "Baking", location: "Top Oven", endTime: getEndTime(0, 0, 10)},
@@ -23,6 +49,73 @@ function App() {
   const [totalTime, setTotalTime] = useState(40); // in seconds
   const [totalDays] = useState(4);
   const [totalBakes, setTotalBakes] = useState(2);
+
+  // Auth state event listener
+  useEffect(() => {
+    // runs after component loads
+    firebase.auth().onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser) {
+        // logged in
+        console.log("logged in as " + firebaseUser.displayName);
+        setUser(firebaseUser);
+      } else {
+        // logged out
+        setUser(null);
+      }
+    })
+  });
+
+  // A callback function for logging out the current user
+  const handleSignOut = () => {
+    firebase.auth().signOut();
+  }
+
+  let content = null // content to render
+
+  if (!user) { // if logged out, show signup form
+    content = (
+      <div className="container">
+        <h1>Sign Up</h1>
+        {/* A sign in form */}
+        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+      </div>
+    )
+  } else { // if logged in, show welcome message
+    content = (
+      <div>
+        {/* <!-- Navigation Bar --> */}
+        <header>
+          <NavigationBar />
+        </header>
+
+        <main>
+          <div>
+            <Switch>
+              <Route exact path="/"> <Dashboard user={user} timerList={timerList} setTimerList={setTimerList} recipes={recipes} taskList={taskList} totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} setTotalTime={setTotalTime} setTotalBakes={setTotalBakes} /> </Route>
+              <Route path="/recipes"> <RecipeList recipes={recipes}/> </Route>
+              <Route path="/about"> <About /> </Route>
+              <Redirect to="/" />
+            </Switch>
+          </div>
+          {/* random button here to log out */}
+          <button className="btn" onClick={handleSignOut}>
+            Log Out
+          </button>
+        </main>
+        
+        <footer className="container-fluid my-3">
+          {/* <!-- Copyright --> */}
+          <div className="copyright">
+            <p>
+              <a href="https://github.com/info340-wi21/project-2-annie2980" rel="noreferrer" target="_blank">GitHub Repo</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+              <a href="http://www.washington.edu" rel="noreferrer" target="_blank">University of Washington</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+              &copy; {new Date().getFullYear()} Annie Liu and Kerri Lee
+            </p>
+          </div>
+        </footer>
+      </div>
+    )
+  }
 
   // Fetch recipe data
   useEffect(() => {
@@ -50,36 +143,7 @@ function App() {
       })
   }, []);
 
-  return (
-		<div>
-			{/* <!-- Navigation Bar --> */}
-      <header>
-        <NavigationBar />
-      </header>
-
-      <main>
-        <div>
-          <Switch>
-            <Route exact path="/"> <Dashboard timerList={timerList} setTimerList={setTimerList} recipes={recipes} taskList={taskList} totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} setTotalTime={setTotalTime} setTotalBakes={setTotalBakes} /> </Route>
-            <Route path="/recipes"> <RecipeList recipes={recipes}/> </Route>
-            <Route path="/about"> <About /> </Route>
-            <Redirect to="/" />
-          </Switch>
-        </div>
-      </main>
-      
-      <footer className="container-fluid my-3">
-        {/* <!-- Copyright --> */}
-        <div className="copyright">
-          <p>
-            <a href="https://github.com/info340-wi21/project-2-annie2980" rel="noreferrer" target="_blank">GitHub Repo</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-            <a href="http://www.washington.edu" rel="noreferrer" target="_blank">University of Washington</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-            &copy; {new Date().getFullYear()} Annie Liu and Kerri Lee
-          </p>
-        </div>
-      </footer>
-		</div>
-  );
+  return content;
 }
 
 function NavigationBar() {
@@ -103,7 +167,7 @@ function NavigationBar() {
 
 // Represents the Dashboard "page"
 function Dashboard(props) {
-  const {timerList, setTimerList, recipes, taskList, totalTime, totalDays, totalBakes, setTotalTime, setTotalBakes} = props;
+  const {user, timerList, setTimerList, recipes, taskList, totalTime, totalDays, totalBakes, setTotalTime, setTotalBakes} = props;
 
   // Recipe Modal states
   const [modalShow, setModalShow] = useState(false);
@@ -194,7 +258,7 @@ function Dashboard(props) {
           <section className="col-sm-12 col-lg-8 col-xl-9 mt-3">
             <div className="container-fluid">
               <h1>
-                Welcome to Your Dashboard!
+                Welcome to Your Dashboard, {user.displayName}!
               </h1>
               <p>Your current tasks are listed below:</p>
             </div>
