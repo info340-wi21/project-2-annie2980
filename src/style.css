@@ -21,7 +21,7 @@ h3 {
 /* Navigation Bar Properties */
 .navbar {
   background-color: #d8d8d8;
-  padding-left: 1.95rem;
+  padding-left: 1.5rem;
 }
 
 nav img {
@@ -31,6 +31,14 @@ nav img {
 
 .navbar-toggler {
   border: none;
+}
+
+.navbar-profile-pic-text {
+  display: none;
+}
+
+.navbar-profile-pic {
+  display: none;
 }
 
 /* Footer Properties */
@@ -183,6 +191,23 @@ input[type=number] {
   text-align: center;
 }
 
+/* Sign-in Page Properties */
+.login-page {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  align-items: center;
+  text-align: center;
+}
+
+.login-logo {
+  width: 5em;
+  height: 5em;
+}
+
+.login-images {
+  display: none;
+}
+
 /* For devices 576px or greater */
 @media (min-width: 576px) {
   /* Recipe Card Properties */
@@ -227,6 +252,40 @@ input[type=number] {
     margin-right: auto;
     max-width: 20em;
     max-height: 20em;
+  }
+
+  /* Login Page Properties */
+  .login-images {
+    display: block;
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .login-images img {
+    margin-left: auto;
+    margin-right: auto;
+    height: 10em;
+  }
+
+  /* Navbar */
+  .dropdown-toggle:after {
+    content: none
+  }
+
+  .navbar-profile-name {
+    display: none;
+  }
+
+  .navbar-profile-pic-text {
+    display: inline;
+  }
+
+  .navbar-profile-pic {
+    display: inline;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #bebebe;
+    border-radius: 50%;
   }
 }
 

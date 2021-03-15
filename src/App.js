@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Route, Switch, Redirect, NavLink} from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase/app';
 import 'firebase/auth'
@@ -35,6 +35,7 @@ const uiConfig = {
 function App() {
   // Authentication state
   const [user, setUser] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(true);
 
   // State value of an array of current timers
   const [timerList, setTimerList] = useState([
@@ -56,66 +57,15 @@ function App() {
     firebase.auth().onAuthStateChanged((firebaseUser) => {
       if (firebaseUser) {
         // logged in
-        console.log("logged in as " + firebaseUser.displayName);
         setUser(firebaseUser);
+        setIsLoading(false);
       } else {
         // logged out
         setUser(null);
+        setIsLoading(false);
       }
     })
   });
-
-  // A callback function for logging out the current user
-  const handleSignOut = () => {
-    firebase.auth().signOut();
-  }
-
-  let content = null // content to render
-
-  if (!user) { // if logged out, show signup form
-    content = (
-      <div className="container">
-        <h1>Sign Up</h1>
-        {/* A sign in form */}
-        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
-      </div>
-    )
-  } else { // if logged in, show welcome message
-    content = (
-      <div>
-        {/* <!-- Navigation Bar --> */}
-        <header>
-          <NavigationBar />
-        </header>
-
-        <main>
-          <div>
-            <Switch>
-              <Route exact path="/"> <Dashboard user={user} timerList={timerList} setTimerList={setTimerList} recipes={recipes} taskList={taskList} totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} setTotalTime={setTotalTime} setTotalBakes={setTotalBakes} /> </Route>
-              <Route path="/recipes"> <RecipeList recipes={recipes}/> </Route>
-              <Route path="/about"> <About /> </Route>
-              <Redirect to="/" />
-            </Switch>
-          </div>
-          {/* random button here to log out */}
-          <button className="btn" onClick={handleSignOut}>
-            Log Out
-          </button>
-        </main>
-        
-        <footer className="container-fluid my-3">
-          {/* <!-- Copyright --> */}
-          <div className="copyright">
-            <p>
-              <a href="https://github.com/info340-wi21/project-2-annie2980" rel="noreferrer" target="_blank">GitHub Repo</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-              <a href="http://www.washington.edu" rel="noreferrer" target="_blank">University of Washington</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-              &copy; {new Date().getFullYear()} Annie Liu and Kerri Lee
-            </p>
-          </div>
-        </footer>
-      </div>
-    )
-  }
 
   // Fetch recipe data
   useEffect(() => {
@@ -143,25 +93,125 @@ function App() {
       })
   }, []);
 
-  return content;
+  // A callback function for logging out the current user
+  const handleSignOut = () => {
+    firebase.auth().signOut();
+  }
+
+  if (isLoading) {
+    return (
+      <div className="text-center mt-5">
+        Connecting...
+      </div>
+    );
+  }
+
+  let content = null // content to render
+
+  if (!user) { // if logged out, show signup form
+    content = (
+      <Login uiConfig={uiConfig} />
+    )
+  } else { // if logged in, show welcome message
+    content = (
+      <div>
+        {/* <!-- Navigation Bar --> */}
+        <header>
+          <NavigationBar user={user} handleSignOut={handleSignOut} />
+        </header>
+
+        <main>
+          <div>
+            <Switch>
+              <Route exact path="/"> <Dashboard user={user} timerList={timerList} setTimerList={setTimerList} recipes={recipes} taskList={taskList} totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} setTotalTime={setTotalTime} setTotalBakes={setTotalBakes} /> </Route>
+              <Route path="/recipes"> <RecipeList recipes={recipes}/> </Route>
+              <Route path="/about"> <About /> </Route>
+              <Redirect to="/" />
+            </Switch>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      {content}
+      <footer className="container-fluid my-3">
+        {/* <!-- Copyright --> */}
+        <div className="copyright">
+          <p>
+            <a href="https://github.com/info340-wi21/project-2-annie2980" rel="noreferrer" target="_blank">GitHub Repo</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="http://www.washington.edu" rel="noreferrer" target="_blank">University of Washington</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+            &copy; {new Date().getFullYear()} Annie Liu and Kerri Lee
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
 }
 
-function NavigationBar() {
+function NavigationBar(props) {
+  const {user, handleSignOut} = props;
+  let profilePic = "img/croissant.jpg";
+  if (user.photoURL !== null) {
+    profilePic = user.photoURL
+  }
+
   return (
     <Navbar className="navbar" expand="md">
-      <NavLink className="navbar-brand" to="/">
-        <img src="img/favicon-no-shadow.png" alt="app-icon" className="d-inline-block align-middle mr-3" title="Bakery by Goran Babic from Iconfinder"/>
+      <NavLink className="navbar-brand" exact to="/">
+        <img src="img/favicon-no-shadow.png" alt="app icon" className="d-inline-block align-middle mr-3" title="Bakery by Goran Babic from Iconfinder"/>
         BakeTime
       </NavLink>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
-        <Nav>
+        <Nav className="mr-auto">
           <NavLink className="nav-link" exact to="/" >Dashboard</NavLink>
           <NavLink className="nav-link" to="/recipes" >Recipes</NavLink>
           <NavLink className="nav-link" to="/about" >About</NavLink>
         </Nav>
+        <Nav>
+          <NavDropdown id="user-options" title={<span><span className="navbar-profile-name">My Options</span><span className="navbar-profile-pic-text">Signed in:&nbsp;&nbsp;</span><img src={profilePic} alt="profile" className="navbar-profile-pic"></img></span>} className="user-dropdown" alignRight>
+            <NavDropdown.Item>Update My Recipes</NavDropdown.Item>
+            <NavDropdown.Item >More Preferences</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item onClick={handleSignOut} >Sign Out</NavDropdown.Item>
+          </NavDropdown>
+        </Nav>
       </Navbar.Collapse>
     </Navbar>
+  );
+}
+
+// Represents the Login "page"
+function Login(props) {
+  return (
+    <section className="login-page mx-3">
+      <img src="img/favicon-no-shadow.png" alt="app-icon" className="login-logo" title="Bakery by Goran Babic from Iconfinder"/>
+      <header>
+        <h1 className="mt-3">
+          Welcome to BakeTime!
+        </h1>
+        <p>
+          A personalized set of timers for all your baking needs!
+        </p>
+      </header>
+
+      <div className="container">
+        <div className="row login-images">
+          <img src="img/cookies.jpg" alt="cookies" />
+          <img src="img/chocolate-cake.jpg" alt="chocolate cake" />
+          <img src="img/croissant.jpg" alt="crossiants" />
+        </div>
+      </div>
+
+      <header>
+        <h2 className="mt-5">Sign Up or Log In:</h2>
+      </header>
+      {/* A sign in form */}
+      <StyledFirebaseAuth uiConfig={props.uiConfig} firebaseAuth={firebase.auth()} />
+    </section>
   );
 }
 
