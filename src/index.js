@@ -29,7 +29,6 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 //      [ ] Add add recipe functionality
 //      [ ] Add update recipes functionality
 //      [ ] Add update tasks and locations functionality
-//      [ ] Add preferences functionality?
 //      [x] Add user stats to database
 //      [ ] Do Coco's suggestion of breaking the <Dashboard> into smaller components
 //      [x] Add cleanup to user authenticaion
@@ -37,3 +36,8 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 //      
 // - LOW PRIORITY
 //      [ ] Add more icons for tasks
+
+// IDEAS FOR CUTTING THINGS OUT
+// - Instead of update recipes you just have delete recipe button in the recipe modal on the Recipes page
+// - Recipe images if it gets too complicated
+// - Stats if it gets too complicated

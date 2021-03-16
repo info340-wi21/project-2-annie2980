@@ -56,10 +56,10 @@ function App() {
         setUser(firebaseUser);
         
         // Reference to the user in the database
-        var userRef = firebase.database().ref(firebaseUser.uid);
+        let userRef = firebase.database().ref(firebaseUser.uid);
         // Grab a snapshot of this location - if it's not defined, populate database for new user
         // Then re-grab the reference to the user
-        userRef.get().then(function(snapshot) {
+        userRef.get().then((snapshot) => {
           if (!snapshot.exists()) {
             console.log("Adding user to database");
             userRef.set(generateDefaultUserInfo(firebaseUser));
@@ -299,7 +299,7 @@ function generateDefaultUserInfo(user) {
   return {
     displayName: user.displayName,
     timerList: {
-      0: {recipeIndex: 1, item: "Pumpkin Pie", task: "Baking", location: "Top Oven", endTime: getEndTime(0, 0, 10).getTime()}
+      0: {recipeIndex: 1, item: "Pumpkin Pie", task: "Second Baking", location: "Top Oven", endTime: getEndTime(0, 0, 10).getTime()}
     },
     recipes: {
       "Apple Pie": {
@@ -400,7 +400,6 @@ function NavigationBar(props) {
             <NavDropdown.Item onClick={showAddRecipeModal}>Add Recipe</NavDropdown.Item>
             <NavDropdown.Item onClick={showUpdateRecipesModal}>Update Recipes</NavDropdown.Item>
             <NavDropdown.Item onClick={showUpdateTasksAndLocationsModal}>Update Tasks and Locations</NavDropdown.Item>
-            <NavDropdown.Item >More Preferences</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={handleSignOut} >Sign Out</NavDropdown.Item>
           </NavDropdown>

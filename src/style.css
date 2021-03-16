@@ -139,6 +139,21 @@ input[type=number] {
   font-weight: 600;
 }
 
+/* Form Properties */
+.form-card {
+  border: none;
+}
+
+.form-subheader {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.add-step-btn {
+  background-color: #9c9c9c;
+  color: white;
+}
+
 /* Statistics Table Properties */
 .stats-data {
   text-align: right;
