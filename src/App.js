@@ -3,13 +3,12 @@ import {Route, Switch, Redirect, NavLink} from 'react-router-dom';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase/app';
-import 'firebase/auth'
 import 'whatwg-fetch';
 import RecipeList from './Recipes';
 import About from './About';
 import { AddTimer } from './AddTimerDash';
 import { StatsTable } from './StatsTable';
-import { TimerRecipeModal } from './Modals';
+import { AddRecipeModal, UpdateRecipesModal, UpdateTasksAndLocationsModal, TimerRecipeModal } from './Modals';
 import { TimerTable } from './TimerTable';
 
 // FirebaseUI config
@@ -54,31 +53,121 @@ function App() {
   // Auth state event listener
   useEffect(() => {
     // runs after component loads
-    firebase.auth().onAuthStateChanged((firebaseUser) => {
+    const authUnregisterFunction = firebase.auth().onAuthStateChanged((firebaseUser) => {
       if (firebaseUser) {
         // logged in
         setUser(firebaseUser);
         setIsLoading(false);
+        
+        // Reference to the user in the database
+        const userRef = firebase.database().ref(user.displayName);
+        const recipesRef = userRef.child('recipes');
+        const tasksRef = userRef.child('tasks');
+        const statsRef = userRef.child('stats');
+
+        recipesRef.set({
+          "Pumpkin Pie": {
+            "recipeName": "Pumpkin Pie",
+            "steps": {
+              "First Baking": {
+                "task": "First Baking",
+                "time": "00:15:00",
+                "description": "Bake at 425 degrees F for 15 minutes."
+              },
+              "Second Baking": {
+                "task": "Second Baking",
+                "time": "00:40:00",
+                "description": "Reduce oven temperature to 350 degrees F and continue baking 35 to 40 minutes or until knife inserted 1 inch from crust comes out clean."
+              }
+            },
+            "prepTime": "00:15:00",
+            "cookTime": "00:55:00",
+            "totalTime": "01:10:00",
+            "src": "img/pumpkin-pie.jpg"
+          }
+        });
+        
+        // Set recipes to what is in the database
+        recipesRef.on('value', (snapshot) => {
+          const theRecipesObj = snapshot.val();
+          let objectKeyArray = Object.keys(theRecipesObj)
+          let recipesArray = objectKeyArray.map((key) => {
+            let singleRecipeObj = theRecipesObj[key];
+            singleRecipeObj.key = key;
+            return singleRecipeObj;
+          })
+          setRecipes(recipesArray);
+        })  
+        
+        // Set taskList to what is in the database
+        // tasksRef.on('value', (snapshot) => {
+        //   const theTasksObj = snapshot.val();
+        //   let objectKeyArray = Object.keys(theTasksObj)
+        //   let tasksArray = objectKeyArray.map((key) => {
+        //     let singleTaskObj = theTasksObj[key];
+        //     singleTaskObj.key = key;
+        //     return singleTaskObj;
+        //   })
+        //   setTaskList(tasksArray);
+        // })
       } else {
         // logged out
         setUser(null);
         setIsLoading(false);
       }
     })
+
+    return function cleanup() {
+      authUnregisterFunction();
+    }
   });
 
+  // Reference to the user in the database
+  // const userRef = firebase.database().ref("user1");
+  // const recipesRef = userRef.child('recipes');
+  // const tasksRef = userRef.child('tasks');
+  // const statsRef = userRef.child('stats');
+  
+  // Set recipes to what is in the database
+  // useEffect(() => {
+  //   recipesRef.on('value', (snapshot) => {
+  //     const theRecipesObj = snapshot.val();
+  //     let objectKeyArray = Object.keys(theRecipesObj)
+  //     let recipesArray = objectKeyArray.map((key) => {
+  //       let singleRecipeObj = theRecipesObj[key];
+  //       singleRecipeObj.key = key;
+  //       return singleRecipeObj;
+  //     })
+  //     setRecipes(recipesArray);
+  //   })
+  // }, [])
+
+  // Set taskList to what is in the database
+  // useEffect(() => {
+  //   tasksRef.on('value', (snapshot) => {
+  //     const theTasksObj = snapshot.val();
+  //     let objectKeyArray = Object.keys(theTasksObj)
+  //     let tasksArray = objectKeyArray.map((key) => {
+  //       let singleTaskObj = theTasksObj[key];
+  //       singleTaskObj.key = key;
+  //       return singleTaskObj;
+  //     })
+  //     setTaskList(tasksArray);
+  //   })
+  // }, [])
+
   // Fetch recipe data
-  useEffect(() => {
-    fetch("./recipes.json")
-      .then((response) => response.json())
-      .then((data) => {
-        let processedData = data;
-        setRecipes(processedData);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      })
-  }, []);
+  // useEffect(() => {
+  //   fetch("./recipes.json")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       let processedData = data;
+  //       setRecipes(processedData);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.message);
+  //     })
+  // }, []);
 
   // Fetch task data
   useEffect(() => {
@@ -93,6 +182,39 @@ function App() {
       })
   }, []);
 
+  // AddRecipeModal states
+  const [addRecipeModalShow, setAddRecipeModalShow] = useState(false);
+
+  const showAddRecipeModal = () => {
+    setAddRecipeModalShow(true);
+  }
+
+  const hideAddRecipeModal = () => {
+    setAddRecipeModalShow(false);
+  }
+
+  // UpdateRecipesModal states
+  const [updateRecipesModalShow, setUpdateRecipesModalShow] = useState(false);
+
+  const showUpdateRecipesModal = () => {
+    setUpdateRecipesModalShow(true);
+  }
+
+  const hideUpdateRecipesModal = () => {
+    setUpdateRecipesModalShow(false);
+  }
+  
+  // UpdateTasksAndLocationsModal states
+  const [updateTasksAndLocationsModalShow, setUpdateTasksAndLocationsModalShow] = useState(false);
+
+  const showUpdateTasksAndLocationsModal = () => {
+    setUpdateTasksAndLocationsModalShow(true);
+  }
+
+  const hideUpdateTasksAndLocationsModal = () => {
+    setUpdateTasksAndLocationsModalShow(false);
+  }
+  
   // A callback function for logging out the current user
   const handleSignOut = () => {
     firebase.auth().signOut();
@@ -117,7 +239,7 @@ function App() {
       <div>
         {/* <!-- Navigation Bar --> */}
         <header>
-          <NavigationBar user={user} handleSignOut={handleSignOut} />
+          <NavigationBar user={user} handleSignOut={handleSignOut} showAddRecipeModal={showAddRecipeModal} showUpdateRecipesModal={showUpdateRecipesModal} showUpdateTasksAndLocationsModal={showUpdateTasksAndLocationsModal} />
         </header>
 
         <main>
@@ -129,6 +251,9 @@ function App() {
               <Redirect to="/" />
             </Switch>
           </div>
+          <AddRecipeModal show={addRecipeModalShow} onHide={hideAddRecipeModal}/>
+          <UpdateRecipesModal show={updateRecipesModalShow} onHide={hideUpdateRecipesModal}/>
+          <UpdateTasksAndLocationsModal show={updateTasksAndLocationsModalShow} onHide={hideUpdateTasksAndLocationsModal} />
         </main>
       </div>
     )
@@ -152,7 +277,8 @@ function App() {
 }
 
 function NavigationBar(props) {
-  const {user, handleSignOut} = props;
+  const {user, handleSignOut, showAddRecipeModal, showUpdateRecipesModal, showUpdateTasksAndLocationsModal} = props;
+
   let profilePic = "img/croissant.jpg";
   if (user.photoURL !== null) {
     profilePic = user.photoURL
@@ -173,7 +299,9 @@ function NavigationBar(props) {
         </Nav>
         <Nav>
           <NavDropdown id="user-options" title={<span><span className="navbar-profile-name">My Options</span><span className="navbar-profile-pic-text">Signed in:&nbsp;&nbsp;</span><img src={profilePic} alt="profile" className="navbar-profile-pic"></img></span>} className="user-dropdown" alignRight>
-            <NavDropdown.Item>Update My Recipes</NavDropdown.Item>
+            <NavDropdown.Item onClick={showAddRecipeModal}>Add Recipe</NavDropdown.Item>
+            <NavDropdown.Item onClick={showUpdateRecipesModal}>Update Recipes</NavDropdown.Item>
+            <NavDropdown.Item onClick={showUpdateTasksAndLocationsModal}>Update Tasks and Locations</NavDropdown.Item>
             <NavDropdown.Item >More Preferences</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={handleSignOut} >Sign Out</NavDropdown.Item>

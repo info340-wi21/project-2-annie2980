@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import firebase from 'firebase/app';
-import 'firebase/auth'
+import 'firebase/auth';
+import 'firebase/database';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 import App from './App';
@@ -21,3 +22,18 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementById('root'));
+
+// TODO:
+// - HIGH PRIORITY
+//      [ ] Set up database
+//      [ ] Add add recipe functionality
+//      [ ] Add update recipes functionality
+//      [ ] Add update tasks and locations functionality
+//      [ ] Add preferences functionality?
+//      [ ] Add user stats to database
+//      [ ] Do Coco's suggestion of breaking the <Dashboard> into smaller components
+//      [x] Add cleanup to user authenticaion
+// - MEDIUM PRIORITY
+//      
+// - LOW PRIORITY
+//      [ ] Add more icons for tasks
