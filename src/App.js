@@ -37,17 +37,14 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   // State value of an array of current timers
-  const [timerList, setTimerList] = useState([
-    {recipeIndex: 0, item: "Apple Pie", task: "Baking", location: "Top Oven", endTime: getEndTime(0, 0, 10)},
-    {recipeIndex: 2, item: "Blueberry Scones", task: "Chilling", location: "Fridge", endTime: getEndTime(0, 0, 30)}
-  ]);
+  const [timerList, setTimerList] = useState([]);
 
   const [recipes, setRecipes] = useState([]);
-  const [taskList, setTaskList] = useState([]);
+  const [taskList, setTaskList] = useState(undefined);
 
   // State for statistics table - will need to fetch later?
   const [totalTime, setTotalTime] = useState(40); // in seconds
-  const [totalDays] = useState(4);
+  const [totalDays, setTotalDays] = useState(4);
   const [totalBakes, setTotalBakes] = useState(2);
 
   // Auth state event listener
@@ -57,70 +54,89 @@ function App() {
       if (firebaseUser) {
         // logged in
         setUser(firebaseUser);
-        setIsLoading(false);
         
         // Reference to the user in the database
-        const userRef = firebase.database().ref(user.displayName);
-        const recipesRef = userRef.child('recipes');
-        const tasksRef = userRef.child('tasks');
-        const statsRef = userRef.child('stats');
-
-        recipesRef.set({
-          "Pumpkin Pie": {
-            "recipeName": "Pumpkin Pie",
-            "steps": {
-              "First Baking": {
-                "task": "First Baking",
-                "time": "00:15:00",
-                "description": "Bake at 425 degrees F for 15 minutes."
-              },
-              "Second Baking": {
-                "task": "Second Baking",
-                "time": "00:40:00",
-                "description": "Reduce oven temperature to 350 degrees F and continue baking 35 to 40 minutes or until knife inserted 1 inch from crust comes out clean."
-              }
-            },
-            "prepTime": "00:15:00",
-            "cookTime": "00:55:00",
-            "totalTime": "01:10:00",
-            "src": "img/pumpkin-pie.jpg"
+        var userRef = firebase.database().ref(firebaseUser.uid);
+        // Grab a snapshot of this location - if it's not defined, populate database for new user
+        // Then re-grab the reference to the user
+        userRef.get().then(function(snapshot) {
+          if (!snapshot.exists()) {
+            console.log("Adding user to database");
+            userRef.set(generateDefaultUserInfo(firebaseUser));
+            userRef = firebase.database().ref(firebaseUser.uid);
           }
-        });
-        
-        // Set recipes to what is in the database
-        recipesRef.on('value', (snapshot) => {
-          const theRecipesObj = snapshot.val();
-          let objectKeyArray = Object.keys(theRecipesObj)
-          let recipesArray = objectKeyArray.map((key) => {
-            let singleRecipeObj = theRecipesObj[key];
-            singleRecipeObj.key = key;
-            return singleRecipeObj;
+        }).catch(function(error) {
+          console.error(error);
+        }).then(() => {
+          // Now, set the state for everything
+          const recipesRef = userRef.child('recipes');
+          const tasksRef = userRef.child('tasks');
+          const statsRef = userRef.child('stats');
+          const timersRef = userRef.child('timerList');
+
+          // Set recipes to what is in the database
+          recipesRef.on('value', (snapshot) => {
+            const theRecipesObj = snapshot.val();
+            let objectKeyArray = Object.keys(theRecipesObj)
+            let recipesArray = objectKeyArray.map((key) => {
+              let singleRecipeObj = theRecipesObj[key];
+              singleRecipeObj.key = key;
+
+              // Map steps to array
+              let stepKeyArray =  Object.keys(singleRecipeObj.steps); // grab keys for each step
+              singleRecipeObj.steps = stepKeyArray.map((key) => {
+                let stepObj = singleRecipeObj.steps[key];
+                stepObj.key = key;
+                return stepObj;
+              })
+
+              return singleRecipeObj;
+            })
+            setRecipes(recipesArray);
+          }) 
+
+          // Set taskList to what is in the database
+          tasksRef.on('value', (snapshot) => {
+            const theTasksObj = snapshot.val();
+            setTaskList(theTasksObj)
           })
-          setRecipes(recipesArray);
-        })  
-        
-        // Set taskList to what is in the database
-        // tasksRef.on('value', (snapshot) => {
-        //   const theTasksObj = snapshot.val();
-        //   let objectKeyArray = Object.keys(theTasksObj)
-        //   let tasksArray = objectKeyArray.map((key) => {
-        //     let singleTaskObj = theTasksObj[key];
-        //     singleTaskObj.key = key;
-        //     return singleTaskObj;
-        //   })
-        //   setTaskList(tasksArray);
-        // })
+
+          // Set stats to what it is in the database
+          statsRef.on('value', (snapshot) => {
+            const theStatsObj = snapshot.val();
+            setTotalTime(theStatsObj.totalTime);
+            setTotalBakes(theStatsObj.totalBakes);
+            let msDiff = new Date().getTime() - new Date(theStatsObj.accountCreated).getTime();
+            let timeDiff = msDiff / (1000 * 3600 * 24)
+            setTotalDays(Math.ceil(timeDiff));
+          })
+
+          // Set timers to what it is in the database
+          timersRef.on('value', (snapshot) => {
+            const timerArr = snapshot.val();
+            if (timerArr === null) {
+              setTimerList([]);
+            } else {
+              timerArr.forEach((obj) => {
+                obj.endTime = new Date(obj.endTime);
+              });
+              setTimerList(timerArr);
+            }
+          })
+        });
+
+        setIsLoading(false);
       } else {
         // logged out
         setUser(null);
         setIsLoading(false);
       }
-    })
+    });
 
     return function cleanup() {
       authUnregisterFunction();
     }
-  });
+  }, []);
 
   // Reference to the user in the database
   // const userRef = firebase.database().ref("user1");
@@ -170,17 +186,17 @@ function App() {
   // }, []);
 
   // Fetch task data
-  useEffect(() => {
-    fetch("./tasks.json")
-      .then((response) => response.json())
-      .then((data) => {
-        let processedData = data;
-        setTaskList(processedData);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      })
-  }, []);
+  // useEffect(() => {
+  //   fetch("./tasks.json")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       let processedData = data;
+  //       setTaskList(processedData);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.message);
+  //     })
+  // }, []);
 
   // AddRecipeModal states
   const [addRecipeModalShow, setAddRecipeModalShow] = useState(false);
@@ -275,6 +291,88 @@ function App() {
     </div>
   );
 }
+
+// Function that returns an object representing the initial state for a new user!
+// Ideas:
+//  - Should we grab the initial recipes in recipes.json and stick them here? Same with tasks.json?
+function generateDefaultUserInfo(user) {
+  return {
+    displayName: user.displayName,
+    timerList: {
+      0: {recipeIndex: 1, item: "Pumpkin Pie", task: "Baking", location: "Top Oven", endTime: getEndTime(0, 0, 10).getTime()}
+    },
+    recipes: {
+      "Apple Pie": {
+        "recipeName": "Apple Pie",
+        "steps": {
+          "Baking": {
+            "task": "Baking",
+            "time": "00:45:00",
+            "description": "Bake at 375 degrees F for 25 minutes. Remove foil; bake until crust is golden brown and filling is bubbly, 20 minutes longer."
+          }
+        },
+        "prepTime": "00:20:00",
+        "cookTime": "00:45:00",
+        "totalTime": "01:05:00",
+        "src": "img/apple-pie.jpg"
+      },
+      "Pumpkin Pie": {
+        "recipeName": "Pumpkin Pie",
+        "steps": {
+          "First Baking": {
+            "task": "First Baking",
+            "time": "00:15:00",
+            "description": "Bake at 425 degrees F for 15 minutes."
+          },
+          "Second Baking": {
+            "task": "Second Baking",
+            "time": "00:40:00",
+            "description": "Reduce oven temperature to 350 degrees F and continue baking 35 to 40 minutes or until knife inserted 1 inch from crust comes out clean."
+          }
+        },
+        "prepTime": "00:15:00",
+        "cookTime": "00:55:00",
+        "totalTime": "01:10:00",
+        "src": "img/pumpkin-pie.jpg"
+      }
+    },
+    tasks: {
+      baking: {
+        "taskName": "baking",
+        "src": "img/baking-task.png",
+        "alt": "task: baking",
+        "title": "Oven by Llisole from the Noun Project",
+        "locations": {
+            0: "Top Oven",
+            1: "Bottom Oven"
+        }
+      },
+      chilling: {
+          "taskName": "chilling",
+          "src": "img/chilling-task.png",
+          "alt": "task: chilling",
+          "title": "Fridge by Ralf Schmitzer from the Noun Project",
+          "locations": {
+              0: "Fridge"
+          }
+      },
+      resting: {
+          "taskName": "resting",
+          "src": "img/resting-task.png",
+          "alt": "task: resting",
+          "title": "Baked Buns by Llisole from the Noun Project",
+          "locations": {
+              0: "Counter"
+          }
+      }
+    },
+    stats: {
+      totalTime: 0,
+      accountCreated: firebase.database.ServerValue.TIMESTAMP,
+      totalBakes: 0
+    }
+  }
+};
 
 function NavigationBar(props) {
   const {user, handleSignOut, showAddRecipeModal, showUpdateRecipesModal, showUpdateTasksAndLocationsModal} = props;
@@ -387,8 +485,17 @@ function Dashboard(props) {
     // just in case, sort the array before rendering
     timerCopy.sort((a, b) => a.endTime - b.endTime);
 
+    // convert date objects to ms
+    timerCopy.forEach((obj) => {
+      obj.endTime = obj.endTime.getTime();
+    })
+
     // update state
-    setTimerList(timerCopy);
+    // setTimerList(timerCopy);
+
+    // Push new timerList to database
+    const timerListRef = firebase.database().ref(user.uid + "/timerList");
+    timerListRef.set(timerCopy);
   };
 
   // Function to handle adding a new timer to timerList
@@ -407,9 +514,16 @@ function Dashboard(props) {
     timerToAdd.endTime = getEndTime(newTimer.hr, newTimer.min, newTimer.sec);
 
     // Update stats
-    setTotalTime(totalTime + getSeconds(newTimer.hr, newTimer.min, newTimer.sec));
+    // setTotalTime(totalTime + getSeconds(newTimer.hr, newTimer.min, newTimer.sec));
+    // if (newTimer.taskName.includes("Baking")) {
+    //     setTotalBakes(totalBakes + 1);
+    // }
+
+    // Push stats to database
+    const userRef = firebase.database().ref(user.uid + "/stats");
+    userRef.child("totalTime").set(totalTime + getSeconds(newTimer.hr, newTimer.min, newTimer.sec));
     if (newTimer.taskName.includes("Baking")) {
-        setTotalBakes(totalBakes + 1);
+      userRef.child("totalBakes").set(totalBakes + 1);
     }
 
     // Add timer to list and clear state
@@ -418,8 +532,17 @@ function Dashboard(props) {
     // just in case, sort the array before rendering
     timerCopy.sort((a, b) => a.endTime - b.endTime);
 
+    // convert date objects to ms
+    timerCopy.forEach((obj) => {
+      obj.endTime = obj.endTime.getTime();
+    });
+
     // update state
-    setTimerList(timerCopy);
+    // setTimerList(timerCopy);
+
+    // Push new timerList to database
+    const timerListRef = firebase.database().ref(user.uid + "/timerList");
+    timerListRef.set(timerCopy);
   };
 
   return (

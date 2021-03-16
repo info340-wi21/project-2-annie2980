@@ -25,12 +25,12 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 
 // TODO:
 // - HIGH PRIORITY
-//      [ ] Set up database
+//      [x] Set up database (generally, I think?)
 //      [ ] Add add recipe functionality
 //      [ ] Add update recipes functionality
 //      [ ] Add update tasks and locations functionality
 //      [ ] Add preferences functionality?
-//      [ ] Add user stats to database
+//      [x] Add user stats to database
 //      [ ] Do Coco's suggestion of breaking the <Dashboard> into smaller components
 //      [x] Add cleanup to user authenticaion
 // - MEDIUM PRIORITY
