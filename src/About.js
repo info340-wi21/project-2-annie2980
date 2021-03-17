@@ -121,6 +121,8 @@ function Acknowledgements() {
         <a href="https://thenounproject.com/term/fridge/564397/" rel="noreferrer" target="_blank">Fridge</a> by <a href="https://thenounproject.com/ralfschmitzer" rel="noreferrer" target="_blank">Ralf Schmitzer</a> from the Noun Project is licensed under <a href="https://creativecommons.org/licenses/by/3.0/" rel="noreferrer" target="_blank">CC BY 3.0</a>
         <br/>
         <a href="https://thenounproject.com/term/baked-buns/1114695/" rel="noreferrer" target="_blank">Baked Buns</a> by <a href="https://thenounproject.com/llisole" rel="noreferrer" target="_blank">Llisole</a> from the Noun Project is licensed under <a href="https://creativecommons.org/licenses/by/3.0/" rel="noreferrer" target="_blank">CC BY 3.0</a>
+        <br/>
+        <a href="https://thenounproject.com/search/?q=bread&i=3784032" rel="noreferrer" target="_blank">Bread</a> by <a href="https://thenounproject.com/faisalyudha2011" rel="noreferrer" target="_blank">A H D U Y</a> from the Noun Project is licensed under <a href="https://creativecommons.org/licenses/by/3.0/" rel="noreferrer" target="_blank">CC BY 3.0</a>
       </div>
       <div className="mt-3">
         <h2 className="subtitle">

@@ -33,8 +33,8 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 //            [x] Remove stylesheet from index.html?
 //      [x] Remove recipes and tasks from databse
 //      [x] Fetch external data
-//      [ ] Add more icons for tasks (add proofing and change the resting in pizza to proofing)
-//            [ ] Give credit on About page
+//      [x] Add more icons for tasks (add proofing and change the resting in pizza to proofing)
+//            [x] Give credit on About page
 //      [x] Add more recipes (pizza, brownies, pound cake, cheesecake, eclairs, banana bread, lava cake, lemon bars)
 //      [x] Get rid of Form.js
 //      [ ] Test out user-content security rule

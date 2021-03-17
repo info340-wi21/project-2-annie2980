@@ -25,5 +25,16 @@
         "locations": [
             "Counter"
         ]
+    },
+    {
+        "taskName": "proofing",
+        "src": "img/proofing-task.png",
+        "alt": "task: proofing",
+        "title": "Bread by A H D U Y from the Noun Project",
+        "locations": [
+            "Counter",
+            "Proofing Drawer",
+            "Oven"
+        ]
     }
 ]
