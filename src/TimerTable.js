@@ -69,19 +69,19 @@ function Icon(props) {
   const {taskList, taskName} = props;
 
   // If task list hasn't been fetched yet, don't return an image
-  if (taskList === undefined) {
+  if (taskList.length === 0) {
     return null;
   }
-  let actualTaskName =  Object.keys(taskList).filter((name) => {
-    return taskName.toLowerCase().includes(name);
-  })[0];
+  // let actualTaskName =  Object.keys(taskList).filter((name) => {
+  //   return taskName.toLowerCase().includes(name);
+  // })[0];
 
-  let iconObject = taskList[actualTaskName];
+  // let iconObject = taskList[actualTaskName];
   // console.log(actualTaskName)
 
-  // let iconObject = taskList.filter((obj) => {
-  //   return taskName.toLowerCase().includes(obj.taskName);
-  // })[0];
+  let iconObject = taskList.filter((obj) => {
+    return taskName.toLowerCase().includes(obj.taskName);
+  })[0];
 
   return (
     <img className="task-icon" src={iconObject.src} alt={iconObject.alt} title={iconObject.title}/>

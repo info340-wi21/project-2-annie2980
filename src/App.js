@@ -8,7 +8,7 @@ import RecipeList from './Recipes';
 import About from './About';
 import { AddTimer } from './AddTimerDash';
 import { StatsTable } from './StatsTable';
-import { AddRecipeModal, UpdateRecipesModal, UpdateTasksAndLocationsModal, TimerRecipeModal } from './Modals';
+import { TimerRecipeModal } from './Modals';
 import { TimerTable } from './TimerTable';
 
 // FirebaseUI config
@@ -40,7 +40,7 @@ function App() {
   const [timerList, setTimerList] = useState([]);
 
   const [recipes, setRecipes] = useState([]);
-  const [taskList, setTaskList] = useState(undefined);
+  const [taskList, setTaskList] = useState([]);
 
   // State for statistics table - will need to fetch later?
   const [totalTime, setTotalTime] = useState(40); // in seconds
@@ -69,37 +69,8 @@ function App() {
           console.error(error);
         }).then(() => {
           // Now, set the state for everything
-          const recipesRef = userRef.child('recipes');
-          const tasksRef = userRef.child('tasks');
           const statsRef = userRef.child('stats');
           const timersRef = userRef.child('timerList');
-
-          // Set recipes to what is in the database
-          recipesRef.on('value', (snapshot) => {
-            const theRecipesObj = snapshot.val();
-            let objectKeyArray = Object.keys(theRecipesObj)
-            let recipesArray = objectKeyArray.map((key) => {
-              let singleRecipeObj = theRecipesObj[key];
-              singleRecipeObj.key = key;
-
-              // Map steps to array
-              let stepKeyArray =  Object.keys(singleRecipeObj.steps); // grab keys for each step
-              singleRecipeObj.steps = stepKeyArray.map((key) => {
-                let stepObj = singleRecipeObj.steps[key];
-                stepObj.key = key;
-                return stepObj;
-              })
-
-              return singleRecipeObj;
-            })
-            setRecipes(recipesArray);
-          }) 
-
-          // Set taskList to what is in the database
-          tasksRef.on('value', (snapshot) => {
-            const theTasksObj = snapshot.val();
-            setTaskList(theTasksObj)
-          })
 
           // Set stats to what it is in the database
           statsRef.on('value', (snapshot) => {
@@ -138,38 +109,31 @@ function App() {
     }
   }, []);
 
-  // AddRecipeModal states
-  const [addRecipeModalShow, setAddRecipeModalShow] = useState(false);
+  // Fetch recipe data
+  useEffect(() => {
+    fetch("./recipes.json")
+      .then((response) => response.json())
+      .then((data) => {
+        let processedData = data;
+        setRecipes(processedData);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      })
+  }, []);
 
-  const showAddRecipeModal = () => {
-    setAddRecipeModalShow(true);
-  }
-
-  const hideAddRecipeModal = () => {
-    setAddRecipeModalShow(false);
-  }
-
-  // UpdateRecipesModal states
-  const [updateRecipesModalShow, setUpdateRecipesModalShow] = useState(false);
-
-  const showUpdateRecipesModal = () => {
-    setUpdateRecipesModalShow(true);
-  }
-
-  const hideUpdateRecipesModal = () => {
-    setUpdateRecipesModalShow(false);
-  }
-  
-  // UpdateTasksAndLocationsModal states
-  const [updateTasksAndLocationsModalShow, setUpdateTasksAndLocationsModalShow] = useState(false);
-
-  const showUpdateTasksAndLocationsModal = () => {
-    setUpdateTasksAndLocationsModalShow(true);
-  }
-
-  const hideUpdateTasksAndLocationsModal = () => {
-    setUpdateTasksAndLocationsModalShow(false);
-  }
+  // Fetch task data
+  useEffect(() => {
+    fetch("./tasks.json")
+      .then((response) => response.json())
+      .then((data) => {
+        let processedData = data;
+        setTaskList(processedData);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      })
+  }, []);
   
   // A callback function for logging out the current user
   const handleSignOut = () => {
@@ -195,7 +159,7 @@ function App() {
       <div>
         {/* <!-- Navigation Bar --> */}
         <header>
-          <NavigationBar user={user} handleSignOut={handleSignOut} showAddRecipeModal={showAddRecipeModal} showUpdateRecipesModal={showUpdateRecipesModal} showUpdateTasksAndLocationsModal={showUpdateTasksAndLocationsModal} />
+          <NavigationBar user={user} handleSignOut={handleSignOut} />
         </header>
 
         <main>
@@ -207,9 +171,6 @@ function App() {
               <Redirect to="/" />
             </Switch>
           </div>
-          <AddRecipeModal show={addRecipeModalShow} onHide={hideAddRecipeModal}/>
-          <UpdateRecipesModal show={updateRecipesModalShow} onHide={hideUpdateRecipesModal}/>
-          <UpdateTasksAndLocationsModal show={updateTasksAndLocationsModalShow} onHide={hideUpdateTasksAndLocationsModal} />
         </main>
       </div>
     )
@@ -239,72 +200,8 @@ function generateDefaultUserInfo(user) {
   return {
     displayName: user.displayName,
     timerList: {
-      0: {recipeIndex: 1, item: "Pumpkin Pie", task: "Second Baking", location: "Top Oven", endTime: getEndTime(0, 0, 10).getTime()}
-    },
-    recipes: {
-      "Apple Pie": {
-        "recipeName": "Apple Pie",
-        "steps": {
-          "Baking": {
-            "task": "Baking",
-            "time": "00:45:00",
-            "description": "Bake at 375 degrees F for 25 minutes. Remove foil; bake until crust is golden brown and filling is bubbly, 20 minutes longer."
-          }
-        },
-        "prepTime": "00:20:00",
-        "cookTime": "00:45:00",
-        "totalTime": "01:05:00",
-        "src": "img/apple-pie.jpg"
-      },
-      "Pumpkin Pie": {
-        "recipeName": "Pumpkin Pie",
-        "steps": {
-          "First Baking": {
-            "task": "First Baking",
-            "time": "00:15:00",
-            "description": "Bake at 425 degrees F for 15 minutes."
-          },
-          "Second Baking": {
-            "task": "Second Baking",
-            "time": "00:40:00",
-            "description": "Reduce oven temperature to 350 degrees F and continue baking 35 to 40 minutes or until knife inserted 1 inch from crust comes out clean."
-          }
-        },
-        "prepTime": "00:15:00",
-        "cookTime": "00:55:00",
-        "totalTime": "01:10:00",
-        "src": "img/pumpkin-pie.jpg"
-      }
-    },
-    tasks: {
-      baking: {
-        "taskName": "baking",
-        "src": "img/baking-task.png",
-        "alt": "task: baking",
-        "title": "Oven by Llisole from the Noun Project",
-        "locations": {
-            0: "Top Oven",
-            1: "Bottom Oven"
-        }
-      },
-      chilling: {
-          "taskName": "chilling",
-          "src": "img/chilling-task.png",
-          "alt": "task: chilling",
-          "title": "Fridge by Ralf Schmitzer from the Noun Project",
-          "locations": {
-              0: "Fridge"
-          }
-      },
-      resting: {
-          "taskName": "resting",
-          "src": "img/resting-task.png",
-          "alt": "task: resting",
-          "title": "Baked Buns by Llisole from the Noun Project",
-          "locations": {
-              0: "Counter"
-          }
-      }
+      // for reference
+      // 0: {recipeIndex: 1, item: "Pumpkin Pie", task: "Second Baking", location: "Top Oven", endTime: getEndTime(0, 0, 10).getTime()}
     },
     stats: {
       totalTime: 0,
@@ -315,9 +212,9 @@ function generateDefaultUserInfo(user) {
 };
 
 function NavigationBar(props) {
-  const {user, handleSignOut, showAddRecipeModal, showUpdateRecipesModal, showUpdateTasksAndLocationsModal} = props;
+  const {user, handleSignOut} = props;
 
-  let profilePic = "img/croissant.jpg";
+  let profilePic = "img/blank-profile-picture-pixabay.png";
   if (user.photoURL !== null) {
     profilePic = user.photoURL
   }
@@ -336,11 +233,7 @@ function NavigationBar(props) {
           <NavLink className="nav-link" to="/about" >About</NavLink>
         </Nav>
         <Nav>
-          <NavDropdown id="user-options" title={<span><span className="navbar-profile-name">My Options</span><span className="navbar-profile-pic-text">Signed in:&nbsp;&nbsp;</span><img src={profilePic} alt="profile" className="navbar-profile-pic"></img></span>} className="user-dropdown" alignRight>
-            <NavDropdown.Item onClick={showAddRecipeModal}>Add Recipe</NavDropdown.Item>
-            <NavDropdown.Item onClick={showUpdateRecipesModal}>Update Recipes</NavDropdown.Item>
-            <NavDropdown.Item onClick={showUpdateTasksAndLocationsModal}>Update Tasks and Locations</NavDropdown.Item>
-            <NavDropdown.Divider />
+          <NavDropdown id="user-options" title={<span><span className="navbar-profile-name">My Options</span><span className="navbar-profile-pic-text">Signed in as {user.displayName}&nbsp;&nbsp;</span><img src={profilePic} alt="profile" className="navbar-profile-pic"></img></span>} className="user-dropdown" alignRight>
             <NavDropdown.Item onClick={handleSignOut} >Sign Out</NavDropdown.Item>
           </NavDropdown>
         </Nav>
@@ -366,7 +259,7 @@ function Login(props) {
       <div className="container">
         <div className="row login-images">
           <img src="img/cookies.jpg" alt="cookies" />
-          <img src="img/chocolate-cake.jpg" alt="chocolate cake" />
+          <img src="img/chocolate-cake-pixabay.jpg" alt="chocolate cake" />
           <img src="img/croissant.jpg" alt="crossiants" />
         </div>
       </div>

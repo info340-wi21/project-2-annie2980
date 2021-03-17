@@ -26,18 +26,13 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 // TODO:
 // - HIGH PRIORITY
 //      [x] Set up database (generally, I think?)
-//      [ ] Add add recipe functionality
-//      [ ] Add update recipes functionality
-//      [ ] Add update tasks and locations functionality
 //      [x] Add user stats to database
 //      [ ] Do Coco's suggestion of breaking the <Dashboard> into smaller components
-//      [x] Add cleanup to user authenticaion
-// - MEDIUM PRIORITY
-//      
-// - LOW PRIORITY
-//      [ ] Add more icons for tasks
-
-// IDEAS FOR CUTTING THINGS OUT
-// - Instead of update recipes you just have delete recipe button in the recipe modal on the Recipes page
-// - Recipe images if it gets too complicated
-// - Stats if it gets too complicated
+//      [ ] Finish moving bootstrap to react bootstrap (footer, login)
+//            [ ] Remove stylesheet from index.html?
+//      [x] Remove recipes and tasks from databse
+//      [x] Fetch external data
+//      [ ] Add more icons for tasks (add proofing and change the resting in pizza to proofing)
+//            [ ] Give credit on About page
+//      [x] Add more recipes (pizza, brownies, pound cake, cheesecake, eclairs, banana bread, lava cake, lemon bars)
+//      [x] Get rid of Form.js

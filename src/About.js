@@ -41,7 +41,7 @@ function AboutApp() {
         </Col>
         <Col xs={12} lg={4} className="align-self-center">
           <div className="about-image">
-            <img className="card-img-top" src="img/chocolate-cake.jpg" alt="a chocolate cake"/>
+            <img className="card-img-top" src="img/chocolate-cake-pixabay.jpg" alt="a chocolate cake"/>
           </div>
         </Col>
       </Row>

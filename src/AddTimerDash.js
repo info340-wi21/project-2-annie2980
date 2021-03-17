@@ -191,14 +191,14 @@ function TaskSelect(props) {
 
     if (taskNum !== "") {
       // Select location from taskList
-      let actualTaskName =  Object.keys(taskList).filter((name) => {
-        return event.target.selectedOptions[0].text.toLowerCase().includes(name);
-      })[0];
-
-      let taskObj = taskList[actualTaskName];
-      // let taskObj = taskList.filter((obj) => {
-      //     return(event.target.selectedOptions[0].text.toLowerCase().includes(obj.taskName));
+      // let actualTaskName =  Object.keys(taskList).filter((name) => {
+      //   return event.target.selectedOptions[0].text.toLowerCase().includes(name);
       // })[0];
+
+      // let taskObj = taskList[actualTaskName];
+      let taskObj = taskList.filter((obj) => {
+          return(event.target.selectedOptions[0].text.toLowerCase().includes(obj.taskName));
+      })[0];
 
       // Update newTimerInput - new task should have step number and task name
       const updatedNewTimer = { ...newTimerInput };
@@ -207,12 +207,12 @@ function TaskSelect(props) {
       setNewTimerInput(updatedNewTimer);
 
       // Update locations
-      const updatedLocs = Object.keys(taskObj.locations).map((locationNum) => {
-        return taskObj.locations[locationNum];
-      });
-      // const updatedLocs = taskObj.locations.map((location) => {
-      //     return location;
+      // const updatedLocs = Object.keys(taskObj.locations).map((locationNum) => {
+      //   return taskObj.locations[locationNum];
       // });
+      const updatedLocs = taskObj.locations.map((location) => {
+          return location;
+      });
       locState.setItems(updatedLocs);
 
       // Update location select - enable location select
