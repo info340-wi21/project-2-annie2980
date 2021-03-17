@@ -23,7 +23,9 @@ function RecipeList(props) {
   }
 
   // Sort recipes by recipe name
-  recipes.sort((recipeA, recipeB) => {
+  let recipesCopy = recipes.map((recipe) => recipe);
+
+  recipesCopy.sort((recipeA, recipeB) => {
     let recipeNameA = recipeA.recipeName.toLowerCase();
     let recipeNameB = recipeB.recipeName.toLowerCase();
 
@@ -37,7 +39,7 @@ function RecipeList(props) {
     return 0;
   });
 
-  let recipeCards = recipes.map((recipe) => {
+  let recipeCards = recipesCopy.map((recipe) => {
     return <RecipeCard recipe={recipe} showModal={showModal} recipeCallback={clickedOnRecipe} key={recipe.recipeName}/>
   })
 
@@ -67,12 +69,10 @@ function RecipeCard(props) {
 
   return (
     <Col md={6} lg={4} xl={3} className="d-flex" >
-      <Card className="mt-4">
-        <Card.Body className="recipe-card" onClick={handleClick}>
+      <Card className="mt-4 recipe-card" onClick={handleClick}>
+        <Card.Img variant="top" className="card-img-top" src={recipe.src} alt={recipe.recipeName}/>
+        <Card.Body>
           <Row>
-            <div>
-              <img className="card-img-top" src={recipe.src} alt={recipe.recipeName}/>
-            </div>
             <Col>
               <Card.Title as="h1">{recipe.recipeName}</Card.Title>
               <Card.Text as="p" >Total Time: {recipeTime.hours + " hr " + recipeTime.minutes + " min"}</Card.Text>

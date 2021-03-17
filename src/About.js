@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Image, Row } from 'react-bootstrap';
 
 function About() {
   return (
@@ -41,7 +41,7 @@ function AboutApp() {
         </Col>
         <Col xs={12} lg={4} className="align-self-center">
           <div className="about-image">
-            <img className="card-img-top" src="img/chocolate-cake-pixabay.jpg" alt="a chocolate cake"/>
+            <Image className="card-img-top" src="img/chocolate-cake-pixabay.jpg" alt="a chocolate cake"/>
           </div>
         </Col>
       </Row>
@@ -64,7 +64,7 @@ function AboutDevelopers() {
             <Col xs={12} md={6}>
               {/* <!-- Annie info --> */}
               <div className="profile-pic my-3">
-                <Card.Img variant="top" src="img/Annie.jpg" alt="Annie Liu"/>
+                <Image rounded className="w-100" src="img/Annie.jpg" alt="Annie Liu"/>
               </div>
               <header>
                 <h2>
@@ -80,7 +80,7 @@ function AboutDevelopers() {
             <Col xs={12} md={6}>
               {/* <!-- Kerri info --> */}
               <div className="profile-pic my-3">
-                <Card.Img variant="top" src="img/Kerri.jpeg" alt="Kerri Lee"/>
+                <Image rounded className="w-100" src="img/Kerri.jpeg" alt="Kerri Lee"/>
               </div>
               <header>
                 <h2>

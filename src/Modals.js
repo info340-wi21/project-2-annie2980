@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 
 // Recipe modal
@@ -21,7 +22,7 @@ export function TimerRecipeModal(props) {
         <button className="btn delete-btn" onClick={handleRemoveAndClose}>Delete Timer</button>
       </Modal.Header>
       <Modal.Body>
-        <TimerRecipeText steps={recipe.steps} location={location} task={task}/>
+        <TimerRecipeText name={recipe.recipeName} src={recipe.src} steps={recipe.steps} location={location} task={task}/>
       </Modal.Body>
       <Modal.Footer>
         <button className="btn" onClick={onHide}>Close Recipe</button>
@@ -57,7 +58,7 @@ export function RecipeModal(props) {
 
 // Recipe text for modal
 function TimerRecipeText(props) {
-  const {steps, location, task} = props;
+  const {recipeName, src, steps, location, task} = props;
 
   let recipeSteps = steps.map((step) => {
     return <Step step={step} key={step.task}/>
@@ -71,6 +72,10 @@ function TimerRecipeText(props) {
       <p>
         <b>Current Task: </b> {task}
       </p>
+      <hr title={"End of timer information"}/>
+      <div className="text-center">
+        <Image src={src} className="w-100" alt={recipeName} rounded/>
+      </div>
       {recipeSteps}
     </div>
   );
@@ -111,7 +116,7 @@ function Step(props) {
 
   return (
     <div>
-      <hr title={"Start of " + step.task + " Step"}></hr>
+      <hr title={"Start of " + step.task + " Step"}/>
       <p>
         <b>Task: </b> {step.task}
       </p>

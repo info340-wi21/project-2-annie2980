@@ -74,50 +74,52 @@ export function AddTimer(props) {
   }
 
   return (
-    <Card>
-      {/* <!-- Card Title and Subtitle --> */}
-      <Container fluid>
-        <Card.Title as="h2" className="card-title mt-2">Add a Timer</Card.Title>
-        <p className="card-subtitle">Select an item to begin:</p>
-      </Container>
-      {/* <!-- Card Body (Forms and Button) --> */}
-      <Container onSubmit={handleSubmit} as="form" fluid>
-        <Row className="align-items-center">
-          {/* <!-- Forms stack when screen is small and large --> */}
-          <Col sm={12} md={4} lg={12} className="my-3">
-            <ItemSelect recipes={recipes} itemVal={itemVal} setItemVal={setItemVal} taskState={taskState} locState={locState} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput}/>
-          </Col>
-
-          <Col sm={12} md={4} lg={12} className="my-3">
-            <TaskSelect taskList={taskList} taskState={taskState} locState={locState} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
-          </Col>
-
-          <Col sm={12} md={4} lg={12} className="my-3">
-            <LocationSelect recipes={recipes} taskState={taskState} locState={locState} setTimerInputs={setTimerInputs} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
-          </Col>
-
-          <Col sm={12} className="mt-2">Expected Time:</Col>
-          <Form.Group className="col-sm-12 mt-2 form-inline timer-input" role="timer">
-            <Col xs={4} className="pl-0 pr-2">
-              <HourInput hrVal={hrVal} setHrVal={setHrVal} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
-              <Form.Label htmlFor="exp-hr" className="w-100">hr</Form.Label>
+    <Col as="section" sm={12} lg={4} xl={3} id="add-timer" className="add-timer mt-3">
+      <Card>
+        {/* <!-- Card Title and Subtitle --> */}
+        <Container fluid>
+          <Card.Title as="h2" className="card-title mt-2">Add a Timer</Card.Title>
+          <p className="card-subtitle">Select an item to begin:</p>
+        </Container>
+        {/* <!-- Card Body (Forms and Button) --> */}
+        <Container onSubmit={handleSubmit} as="form" fluid>
+          <Row className="align-items-center">
+            {/* <!-- Forms stack when screen is small and large --> */}
+            <Col sm={12} md={4} lg={12} className="my-3">
+              <ItemSelect recipes={recipes} itemVal={itemVal} setItemVal={setItemVal} taskState={taskState} locState={locState} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput}/>
             </Col>
-            <Col xs={4} className="px-2">
-              <MinuteInput minVal={minVal} setMinVal={setMinVal} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
-              <Form.Label htmlFor="exp-min" className="w-100">min</Form.Label>
-            </Col>
-            <Col xs={4} className="pr-0 pl-2">
-              <SecondInput secVal={secVal} setSecVal={setSecVal} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
-              <Form.Label htmlFor="exp-sec" className="w-100">sec</Form.Label>
-            </Col>
-          </Form.Group>
 
-          <Col xs={12} className="mb-3 text-center">
-            <button className="btn timer-btn" type="submit">Confirm Timer</button>
-          </Col>
-        </Row>
-      </Container>
-    </Card>
+            <Col sm={12} md={4} lg={12} className="my-3">
+              <TaskSelect taskList={taskList} taskState={taskState} locState={locState} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
+            </Col>
+
+            <Col sm={12} md={4} lg={12} className="my-3">
+              <LocationSelect recipes={recipes} taskState={taskState} locState={locState} setTimerInputs={setTimerInputs} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
+            </Col>
+
+            <Col sm={12} className="mt-2">Expected Time:</Col>
+            <Form.Group className="col-sm-12 mt-2 form-inline timer-input" role="timer">
+              <Col xs={4} className="pl-0 pr-2">
+                <HourInput hrVal={hrVal} setHrVal={setHrVal} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
+                <Form.Label htmlFor="exp-hr" className="w-100">hr</Form.Label>
+              </Col>
+              <Col xs={4} className="px-2">
+                <MinuteInput minVal={minVal} setMinVal={setMinVal} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
+                <Form.Label htmlFor="exp-min" className="w-100">min</Form.Label>
+              </Col>
+              <Col xs={4} className="pr-0 pl-2">
+                <SecondInput secVal={secVal} setSecVal={setSecVal} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
+                <Form.Label htmlFor="exp-sec" className="w-100">sec</Form.Label>
+              </Col>
+            </Form.Group>
+
+            <Col xs={12} className="mb-3 text-center">
+              <button className="btn timer-btn" type="submit">Confirm Timer</button>
+            </Col>
+          </Row>
+        </Container>
+      </Card>
+    </Col>
   );
 }
 
@@ -191,11 +193,6 @@ function TaskSelect(props) {
 
     if (taskNum !== "") {
       // Select location from taskList
-      // let actualTaskName =  Object.keys(taskList).filter((name) => {
-      //   return event.target.selectedOptions[0].text.toLowerCase().includes(name);
-      // })[0];
-
-      // let taskObj = taskList[actualTaskName];
       let taskObj = taskList.filter((obj) => {
           return(event.target.selectedOptions[0].text.toLowerCase().includes(obj.taskName));
       })[0];

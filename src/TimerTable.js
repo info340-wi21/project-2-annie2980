@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import { Container, Table, Col, Image } from 'react-bootstrap';
 import { useTimer } from 'react-timer-hook';
 
 // Represents the entire table of timers
@@ -13,7 +13,7 @@ export function TimerTable(props) {
     - recipeCallback(currentRecipe, location, task, timerIndex): callback function to set recipe modal state
     - showModal(): callback function to show the recipe modal
   */
-  const {recipes, taskList, timerList, handleRemove, recipeCallback, showModal} = props;
+  const {username, recipes, taskList, timerList, handleRemove, recipeCallback, showModal} = props;
   
   // for each timer, render a TimerRow
   let timerRows = [];
@@ -26,20 +26,32 @@ export function TimerTable(props) {
   }
 
   return (
-    <Table hover aria-label="List of Current Tasks">
-      <thead>
-        <tr className="dashboard-header">
-          <th scope="col" className="task-icon-text" >Task</th>
-          <th scope="col">Item</th>
-          <th scope="col" className="task-text" >Task</th>
-          <th scope="col" className="loc-text">Location</th>
-          <th scope="col" className="time-text">Time Left</th>
-        </tr>
-      </thead>
-      <tbody id="timer-body">
-        {timerRows}
-      </tbody>
-    </Table>
+    <Col as="section" sm={12} lg={8} xl={9} className="mt-3">
+      <Container fluid className="p-0">
+      <h1>
+          Welcome to Your Dashboard, {username}!
+      </h1>
+      <p>Your current tasks are listed below:</p>
+      </Container>
+      <Table hover aria-label="List of Current Tasks">
+        <thead>
+          <tr className="dashboard-header">
+            <th scope="col" className="task-icon-text" >Task</th>
+            <th scope="col">Item</th>
+            <th scope="col" className="task-text" >Task</th>
+            <th scope="col" className="loc-text">Location</th>
+            <th scope="col" className="time-text">Time Left</th>
+          </tr>
+        </thead>
+        <tbody id="timer-body">
+          {timerRows}
+        </tbody>
+      </Table>
+      <Container fluid>
+        <p className="tap-more">Tap on the item to see more information!</p>
+        <p className="click-more">Click on the item to see more information!</p>
+      </Container>
+  </Col>
   );
 }
 
@@ -72,19 +84,13 @@ function Icon(props) {
   if (taskList.length === 0) {
     return null;
   }
-  // let actualTaskName =  Object.keys(taskList).filter((name) => {
-  //   return taskName.toLowerCase().includes(name);
-  // })[0];
-
-  // let iconObject = taskList[actualTaskName];
-  // console.log(actualTaskName)
 
   let iconObject = taskList.filter((obj) => {
     return taskName.toLowerCase().includes(obj.taskName);
   })[0];
 
   return (
-    <img className="task-icon" src={iconObject.src} alt={iconObject.alt} title={iconObject.title}/>
+    <Image className="task-icon" src={iconObject.src} alt={iconObject.alt} title={iconObject.title}/>
   )
 }
 

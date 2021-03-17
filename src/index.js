@@ -27,9 +27,10 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 // - HIGH PRIORITY
 //      [x] Set up database (generally, I think?)
 //      [x] Add user stats to database
-//      [ ] Do Coco's suggestion of breaking the <Dashboard> into smaller components
-//      [ ] Finish moving bootstrap to react bootstrap (footer, login)
-//            [ ] Remove stylesheet from index.html?
+//      [x] Do Coco's suggestion of breaking the <Dashboard> into smaller components
+//            - You honestly can't reduce it any further (i tried)
+//      [x] Finish moving bootstrap to react bootstrap (footer, login)
+//            [x] Remove stylesheet from index.html?
 //      [x] Remove recipes and tasks from databse
 //      [x] Fetch external data
 //      [ ] Add more icons for tasks (add proofing and change the resting in pizza to proofing)

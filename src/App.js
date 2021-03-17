@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {Route, Switch, Redirect, NavLink} from 'react-router-dom';
-import { Navbar, Nav, NavDropdown, Container, Row, Col, Alert } from 'react-bootstrap';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import { Navbar, Nav, NavDropdown, Container, Image } from 'react-bootstrap';
 import firebase from 'firebase/app';
 import 'whatwg-fetch';
 import RecipeList from './Recipes';
 import About from './About';
-import { AddTimer } from './AddTimerDash';
-import { StatsTable } from './StatsTable';
-import { TimerRecipeModal } from './Modals';
-import { TimerTable } from './TimerTable';
+import Dashboard from './Dashboard';
+import Login from './Login';
 
 // FirebaseUI config
 const uiConfig = {
@@ -166,7 +163,7 @@ function App() {
           <div>
             <Switch>
               <Route exact path="/"> <Dashboard user={user} timerList={timerList} recipes={recipes} taskList={taskList} totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} /> </Route>
-              <Route path="/recipes"> <RecipeList recipes={recipes}/> </Route>
+              <Route path="/recipes"> <RecipeList recipes={recipes} /> </Route>
               <Route path="/about"> <About /> </Route>
               <Redirect to="/" />
             </Switch>
@@ -179,7 +176,7 @@ function App() {
   return (
     <div>
       {content}
-      <footer className="container-fluid my-3">
+      <Container fluid as="footer" className="my-3">
         {/* <!-- Copyright --> */}
         <div className="copyright">
           <p>
@@ -188,24 +185,20 @@ function App() {
             &copy; {new Date().getFullYear()} Annie Liu and Kerri Lee
           </p>
         </div>
-      </footer>
+      </Container>
     </div>
   );
 }
 
 // Function that returns an object representing the initial state for a new user!
-// Ideas:
-//  - Should we grab the initial recipes in recipes.json and stick them here? Same with tasks.json?
+// for reference
+// 0: {recipeIndex: 1, item: "Pumpkin Pie", task: "Second Baking", location: "Top Oven", endTime: getEndTime(0, 0, 10).getTime()}
 function generateDefaultUserInfo(user) {
   return {
     displayName: user.displayName,
-    timerList: {
-      // for reference
-      // 0: {recipeIndex: 1, item: "Pumpkin Pie", task: "Second Baking", location: "Top Oven", endTime: getEndTime(0, 0, 10).getTime()}
-    },
     stats: {
       totalTime: 0,
-      accountCreated: firebase.database.ServerValue.TIMESTAMP,
+      accountCreated: new Date().getTime(),
       totalBakes: 0
     }
   }
@@ -233,204 +226,13 @@ function NavigationBar(props) {
           <NavLink className="nav-link" to="/about" >About</NavLink>
         </Nav>
         <Nav>
-          <NavDropdown id="user-options" title={<span><span className="navbar-profile-name">My Options</span><span className="navbar-profile-pic-text">Signed in as {user.displayName}&nbsp;&nbsp;</span><img src={profilePic} alt="profile" className="navbar-profile-pic"></img></span>} className="user-dropdown" alignRight>
+          <NavDropdown id="user-options" title={<span><span className="navbar-profile-name">My Options</span><span className="navbar-profile-pic-text">Signed in as {user.displayName}&nbsp;&nbsp;</span><Image src={profilePic} alt="profile" className="navbar-profile-pic" roundedCircle /></span>} className="user-dropdown" alignRight>
             <NavDropdown.Item onClick={handleSignOut} >Sign Out</NavDropdown.Item>
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
   );
-}
-
-// Represents the Login "page"
-function Login(props) {
-  return (
-    <section className="login-page mx-3">
-      <img src="img/favicon-no-shadow.png" alt="app-icon" className="login-logo" title="Bakery by Goran Babic from Iconfinder"/>
-      <header>
-        <h1 className="mt-3">
-          Welcome to BakeTime!
-        </h1>
-        <p>
-          A personalized set of timers for all your baking needs!
-        </p>
-      </header>
-
-      <div className="container">
-        <div className="row login-images">
-          <img src="img/cookies.jpg" alt="cookies" />
-          <img src="img/chocolate-cake-pixabay.jpg" alt="chocolate cake" />
-          <img src="img/croissant.jpg" alt="crossiants" />
-        </div>
-      </div>
-
-      <header>
-        <h2 className="mt-5">Sign Up or Log In:</h2>
-      </header>
-      {/* A sign in form */}
-      <StyledFirebaseAuth uiConfig={props.uiConfig} firebaseAuth={firebase.auth()} />
-    </section>
-  );
-}
-
-// Represents the Dashboard "page"
-function Dashboard(props) {
-  const {user, timerList, recipes, taskList, totalTime, totalDays, totalBakes} = props;
-
-  // Recipe Modal states
-  const [modalShow, setModalShow] = useState(false);
-  const [recipe, setRecipe] = useState({});
-  const [location, setLocation] = useState({});
-  const [task, setTask] = useState({});
-  const [clickedTimerIndex, setTimerIndex] = useState(0);
-
-  const showModal = () => {
-    setModalShow(true);
-  }
-
-  const hideModal = () => {
-    setModalShow(false);
-  }
-
-  // Current recipe for modal
-  const clickedOnRecipe = (currentRecipe, location, task, timerIndex) => {
-    setRecipe(currentRecipe);
-    setLocation(location);
-    setTask(task);
-    setTimerIndex(timerIndex);
-  }
-
-  // Callback for removing recipe using recipe modal or deleteTimerModal
-  const handleRemoveAndClose = function() {
-    handleRemove(clickedTimerIndex);
-    setTimerIndex(0);
-    hideModal();
-  }
-
-  // Function to handle removal of a timer from timerList
-  const handleRemove = function(timerRowIndex) {
-    // fresh object
-    const timerCopy = timerList.filter((timer, index) => {
-      return index !== timerRowIndex
-    });
-
-    // just in case, sort the array before rendering
-    timerCopy.sort((a, b) => a.endTime - b.endTime);
-
-    // convert date objects to ms
-    timerCopy.forEach((obj) => {
-      obj.endTime = obj.endTime.getTime();
-    })
-
-    // update state
-    // setTimerList(timerCopy);
-
-    // Push new timerList to database
-    const timerListRef = firebase.database().ref(user.uid + "/timerList");
-    timerListRef.set(timerCopy);
-  };
-
-  // Function to handle adding a new timer to timerList
-  const handleAdd = function(newTimer) {
-    // fresh object
-    const timerCopy = timerList.map((timer) => {
-      return timer;
-    });
-
-    let timerToAdd = {};
-    timerToAdd.recipeIndex = newTimer.recipeIndex;
-    timerToAdd.item = newTimer.recipeName;
-    timerToAdd.task = newTimer.taskName;
-    timerToAdd.location = newTimer.location;
-    // Calculate when the timer should go off
-    timerToAdd.endTime = getEndTime(newTimer.hr, newTimer.min, newTimer.sec);
-
-    // Update stats
-    // setTotalTime(totalTime + getSeconds(newTimer.hr, newTimer.min, newTimer.sec));
-    // if (newTimer.taskName.includes("Baking")) {
-    //     setTotalBakes(totalBakes + 1);
-    // }
-
-    // Push stats to database
-    const userRef = firebase.database().ref(user.uid + "/stats");
-    userRef.child("totalTime").set(totalTime + getSeconds(newTimer.hr, newTimer.min, newTimer.sec));
-    if (newTimer.taskName.includes("Baking")) {
-      userRef.child("totalBakes").set(totalBakes + 1);
-    }
-
-    // Add timer to list and clear state
-    timerCopy.push(timerToAdd);
-
-    // just in case, sort the array before rendering
-    timerCopy.sort((a, b) => a.endTime - b.endTime);
-
-    // convert date objects to ms
-    timerCopy.forEach((obj) => {
-      obj.endTime = obj.endTime.getTime();
-    });
-
-    // update state
-    // setTimerList(timerCopy);
-
-    // Push new timerList to database
-    const timerListRef = firebase.database().ref(user.uid + "/timerList");
-    timerListRef.set(timerCopy);
-  };
-
-  return (
-    <div>
-      <Container className="main-container" fluid>
-        {/* <!-- Button to Add Timer --> */}
-        <Row>
-          <Alert variant="info" className="add-timer-alert w-100" role="alert">
-            <span className="add-timer-text">Click to Add a New Timer:</span>
-            <a className="btn ml-3" href="#add-timer">Add Timer</a>
-          </Alert>
-        </Row>
-
-        <Row>
-          {/* <!-- Timer Table --> */}
-          <Col as="section" sm={12} lg={8} xl={9} className="mt-3">
-            <Container fluid>
-              <h1>
-                Welcome to Your Dashboard, {user.displayName}!
-              </h1>
-              <p>Your current tasks are listed below:</p>
-            </Container>
-            <TimerTable recipes={recipes} taskList={taskList} timerList={timerList} handleRemove={handleRemove} recipeCallback={clickedOnRecipe} showModal={showModal} />
-            <Container fluid>
-              <p className="tap-more">Tap on the item to see more information!</p>
-              <p className="click-more">Click on the item to see more information!</p>
-            </Container>
-          </Col>
-
-          {/* <!-- Add Timer --> */}
-          <Col as="section" sm={12} lg={4} xl={3} id="add-timer" className="add-timer mt-3">
-            <AddTimer recipes={recipes} taskList={taskList} handleAdd={handleAdd} />
-          </Col>
-
-          {/* <!-- Statistics Table --> */}
-          <Col as="section" sm={12} lg={8} xl={9} className="mt-3 mb-5">
-            <StatsTable totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} />
-          </Col>
-        </Row>
-      </Container>
-      {/* <!-- Recipe Info Modal --> */}
-      <TimerRecipeModal show={modalShow} onHide={hideModal} recipe={recipe} location={location} task={task} handleRemoveAndClose={handleRemoveAndClose}/>
-    </div>
-  );
-}
-
-// Adds hours, minutes, and seconds to the current Date
-function getEndTime(hr, min, sec) {
-  // Calculate the amount of time, in ms, to add to the date
-  let timeToAdd = 1000 * getSeconds(hr, min, sec);
-  return new Date(new Date().getTime() + timeToAdd);
-}
-
-// Gets number of seconds from hours, minutes, seconds
-function getSeconds(hr, min, sec) {
-  return sec + 60 * (min + 60 * hr);
 }
 
 export default App;
