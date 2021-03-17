@@ -1,4 +1,5 @@
 import React from 'react';
+import { Table } from 'react-bootstrap';
 
 // Represents the stats table
 export function StatsTable(props) {
@@ -11,7 +12,7 @@ export function StatsTable(props) {
   const { totalTime, totalDays, totalBakes } = props;
   let totalHours = totalTime / 3600; // convert seconds to hours
   return (
-    <table className="table mt-3" aria-label="list of baking statistics">
+    <Table className="mt-3" aria-label="list of baking statistics">
       <thead>
         <tr>
           <th className="stats-header" colSpan="2">Here Are Some Fun Statistics!</th>
@@ -31,6 +32,6 @@ export function StatsTable(props) {
           <td className="stats-data stats-avg-time">{ (totalHours / totalDays).toFixed(2) + " Hours" }</td>
         </tr>
       </tbody>
-    </table>
+    </Table>
   );
 }

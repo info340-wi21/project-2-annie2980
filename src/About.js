@@ -1,8 +1,9 @@
 import React from 'react';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 
 function About() {
   return (
-    <div className="container">
+    <Container>
       {/* <!-- About this project --> */}
       <AboutApp />
 
@@ -11,7 +12,7 @@ function About() {
 
       {/* <!-- Sources and Acknowledgements --> */}
       <Acknowledgements />
-    </div>
+    </Container>
   );
 }
 
@@ -21,8 +22,8 @@ function AboutApp() {
       <header>
         <h1>About BakeTime</h1>
       </header>
-      <div className="row">
-        <div className="col-xs-12 col-lg-8 align-self-center">
+      <Row>
+        <Col xs={12} lg={8} className="align-self-center">
           <div className="mt-1">
             <div className="subtitle mb-2">
               As frequent bakers...
@@ -37,13 +38,13 @@ function AboutApp() {
               <em>Whether you're an amateur or professional baker, we want to help you achieve a stress-free baking experience!</em>
             </p>
           </div>
-        </div>
-        <div className="col-xs-12 col-lg-4 align-self-center">
+        </Col>
+        <Col xs={12} lg={4} className="align-self-center">
           <div className="about-image">
             <img className="card-img-top" src="img/chocolate-cake.jpg" alt="a chocolate cake"/>
           </div>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </section>
   );
 }
@@ -58,12 +59,12 @@ function AboutDevelopers() {
         <div className="subtitle mb-2">
           We like cake!
         </div>
-        <div className="container">
-          <div className="row text-center">
-            <div className="col-xs-12 col-md-6">
+        <Container>
+          <Row className="text-center">
+            <Col xs={12} md={6}>
               {/* <!-- Annie info --> */}
               <div className="profile-pic my-3">
-                <img className="card-img-top" src="img/Annie.jpg" alt="Annie Liu"/>
+                <Card.Img variant="top" src="img/Annie.jpg" alt="Annie Liu"/>
               </div>
               <header>
                 <h2>
@@ -74,12 +75,12 @@ function AboutDevelopers() {
                 Year: Junior <br/>
                 Major: Informatics, Psychology
               </p>
-            </div>
+            </Col>
 
-            <div className="col-xs-12 col-md-6">
+            <Col xs={12} md={6}>
               {/* <!-- Kerri info --> */}
               <div className="profile-pic my-3">
-                <img className="card-img-top" src="img/Kerri.jpeg" alt="Kerri Lee"/>
+                <Card.Img variant="top" src="img/Kerri.jpeg" alt="Kerri Lee"/>
               </div>
               <header>
                 <h2>
@@ -90,9 +91,9 @@ function AboutDevelopers() {
                 Year: Junior <br/>
                 Major: Computer Science
               </p>
-            </div>
-          </div>
-        </div>
+            </Col>
+          </Row>
+        </Container>
       </div>
     </section>
   );

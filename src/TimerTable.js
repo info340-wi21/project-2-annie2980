@@ -1,4 +1,5 @@
 import React from 'react';
+import { Table } from 'react-bootstrap';
 import { useTimer } from 'react-timer-hook';
 
 // Represents the entire table of timers
@@ -25,7 +26,7 @@ export function TimerTable(props) {
   }
 
   return (
-    <table className="table table-hover" aria-label="List of Current Tasks">
+    <Table hover aria-label="List of Current Tasks">
       <thead>
         <tr className="dashboard-header">
           <th scope="col" className="task-icon-text" >Task</th>
@@ -38,7 +39,7 @@ export function TimerTable(props) {
       <tbody id="timer-body">
         {timerRows}
       </tbody>
-    </table>
+    </Table>
   );
 }
 

@@ -1,4 +1,5 @@
 import React , { useState } from 'react';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 import { RecipeModal } from './Modals';
 
 function RecipeList(props) {
@@ -42,13 +43,13 @@ function RecipeList(props) {
 
   return (
     <div>
-      <div className="container-fluid">
+      <Container fluid>
         {/* <!-- Recipe Cards --> */}
-        <div className="row">
+        <Row>
           {recipeCards}
-        </div>
+        </Row>
         
-      </div>
+      </Container>
       <RecipeModal show={modalShow} onHide={hideModal} recipe={recipe}/>
     </div>
   );
@@ -65,21 +66,21 @@ function RecipeCard(props) {
   let recipeTime = parseTimeString(recipe.totalTime);
 
   return (
-    <div className="col-md-6 col-lg-4 col-xl-3 d-flex" >
-      <div className="card mt-4">
-        <div className="card-body recipe-card" onClick={handleClick}>
-          <div className="row">
+    <Col md={6} lg={4} xl={3} className="d-flex" >
+      <Card className="mt-4">
+        <Card.Body className="recipe-card" onClick={handleClick}>
+          <Row>
             <div>
               <img className="card-img-top" src={recipe.src} alt={recipe.recipeName}/>
             </div>
-            <div className="col">
-              <h1 className="card-title">{recipe.recipeName}</h1>
-              <p className="card-text">Total Time: {recipeTime.hours + " hr " + recipeTime.minutes + " min"}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            <Col>
+              <Card.Title as="h1">{recipe.recipeName}</Card.Title>
+              <Card.Text as="p" >Total Time: {recipeTime.hours + " hr " + recipeTime.minutes + " min"}</Card.Text>
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
+    </Col>
   );
 }
 

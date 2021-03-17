@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Card, Container, Row, Col, Form } from 'react-bootstrap';
 
 // Represents the Add Timer form
 export function AddTimer(props) {
@@ -73,50 +74,50 @@ export function AddTimer(props) {
   }
 
   return (
-    <div className="card">
+    <Card>
       {/* <!-- Card Title and Subtitle --> */}
-      <div className="container-fluid">
-        <h2 className="card-title mt-2">Add a Timer</h2>
+      <Container fluid>
+        <Card.Title as="h2" className="card-title mt-2">Add a Timer</Card.Title>
         <p className="card-subtitle">Select an item to begin:</p>
-      </div>
+      </Container>
       {/* <!-- Card Body (Forms and Button) --> */}
-      <form onSubmit={handleSubmit} className="container-fluid">
-        <div className="row align-items-center">
+      <Container onSubmit={handleSubmit} as="form" fluid>
+        <Row className="align-items-center">
           {/* <!-- Forms stack when screen is small and large --> */}
-          <div className="col-sm-12 col-md-4 col-lg-12 my-3">
+          <Col sm={12} md={4} lg={12} className="my-3">
             <ItemSelect recipes={recipes} itemVal={itemVal} setItemVal={setItemVal} taskState={taskState} locState={locState} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput}/>
-          </div>
+          </Col>
 
-          <div className="col-sm-12 col-md-4 col-lg-12 my-3">
+          <Col sm={12} md={4} lg={12} className="my-3">
             <TaskSelect taskList={taskList} taskState={taskState} locState={locState} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
-          </div>
+          </Col>
 
-          <div className="col-sm-12 col-md-4 col-lg-12 my-3">
+          <Col sm={12} md={4} lg={12} className="my-3">
             <LocationSelect recipes={recipes} taskState={taskState} locState={locState} setTimerInputs={setTimerInputs} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
-          </div>
+          </Col>
 
-          <div className="col-sm-12 mt-2">Expected Time:</div>
-          <div className="col-sm-12 mt-2 form-group form-inline timer-input" role="timer">
-            <div className="col-4 pl-0 pr-2">
+          <Col sm={12} className="mt-2">Expected Time:</Col>
+          <Form.Group className="col-sm-12 mt-2 form-inline timer-input" role="timer">
+            <Col xs={4} className="pl-0 pr-2">
               <HourInput hrVal={hrVal} setHrVal={setHrVal} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
-              <label htmlFor="exp-hr" className="w-100">hr</label>
-            </div>
-            <div className="col-4 px-2">
+              <Form.Label htmlFor="exp-hr" className="w-100">hr</Form.Label>
+            </Col>
+            <Col xs={4} className="px-2">
               <MinuteInput minVal={minVal} setMinVal={setMinVal} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
-              <label htmlFor="exp-min" className="w-100">min</label>
-            </div>
-            <div className="col-4 pr-0 pl-2">
+              <Form.Label htmlFor="exp-min" className="w-100">min</Form.Label>
+            </Col>
+            <Col xs={4} className="pr-0 pl-2">
               <SecondInput secVal={secVal} setSecVal={setSecVal} newTimerInput={newTimerInput} setNewTimerInput={setNewTimerInput} />
-              <label htmlFor="exp-sec" className="w-100">sec</label>
-            </div>
-          </div>
+              <Form.Label htmlFor="exp-sec" className="w-100">sec</Form.Label>
+            </Col>
+          </Form.Group>
 
-          <div className="col-12 mb-3 text-center">
+          <Col xs={12} className="mb-3 text-center">
             <button className="btn timer-btn" type="submit">Confirm Timer</button>
-          </div>
-        </div>
-      </form>
-    </div>
+          </Col>
+        </Row>
+      </Container>
+    </Card>
   );
 }
 
@@ -166,10 +167,10 @@ function ItemSelect(props) {
   };
 
   return (
-    <select value={itemVal} onChange={handleItemChange} id="item-select" className="form-control" aria-label="Select recipe item" required>
+    <Form.Control as="select" value={itemVal} onChange={handleItemChange} id="item-select" aria-label="Select recipe item" required>
       <option value="" defaultValue>Pick an Item...</option>
       {itemSelect}
-    </select>
+    </Form.Control>
   );
 }
 
@@ -225,10 +226,10 @@ function TaskSelect(props) {
   };
 
   return (
-    <select value={taskState.selectVal} onChange={handleTaskChange} id="task-select" className="form-control" aria-label="Select recipe task" required disabled={taskState.disabled}>
+    <Form.Control as="select" value={taskState.selectVal} onChange={handleTaskChange} id="task-select" aria-label="Select recipe task" required disabled={taskState.disabled}>
       <option value="" defaultValue>Pick a Task...</option>
       {taskSelect}
-    </select>
+    </Form.Control>
   );
 }
 
@@ -265,10 +266,10 @@ function LocationSelect(props) {
   }
 
   return (
-    <select value={locState.selectVal} onChange={handleLocationChange} id="loc-select" className="form-control" aria-label="Select location" required disabled={locState.disabled}>
+    <Form.Control as="select" value={locState.selectVal} onChange={handleLocationChange} id="loc-select" aria-label="Select location" required disabled={locState.disabled}>
       <option value="" defaultValue>Pick a Location...</option>
       {locationSelect}
-    </select>
+    </Form.Control>
   );
 }
 
@@ -287,7 +288,7 @@ function HourInput(props) {
   };
 
   return (
-    <input onInput={handleHrInput} value={hrVal} id="exp-hr" type="number" name="hours" min="0" max="24" className="form-control w-100" aria-label="hours remaining" required></input>
+    <Form.Control as="input" onInput={handleHrInput} value={hrVal} id="exp-hr" type="number" name="hours" min="0" max="24" className="w-100" aria-label="hours remaining" required></Form.Control>
   );
 }
 
@@ -306,7 +307,7 @@ function MinuteInput(props) {
   };
 
   return (
-    <input onInput={handleMinInput} value={minVal} id="exp-min" type="number" name="minutes" min="0" max="59" className="form-control w-100" aria-label="minutes remaining" required></input>
+    <Form.Control as="input" onInput={handleMinInput} value={minVal} id="exp-min" type="number" name="minutes" min="0" max="59" className="w-100" aria-label="minutes remaining" required></Form.Control>
   );
 }
 
@@ -325,7 +326,7 @@ function SecondInput(props) {
   };
 
   return (
-    <input onInput={handleSecInput} value={secVal} id="exp-sec" type="number" name="seconds" min="0" max="59" className="form-control w-100" aria-label="seconds remaining" required></input>
+    <Form.Control as="input" onInput={handleSecInput} value={secVal} id="exp-sec" type="number" name="seconds" min="0" max="59" className="w-100" aria-label="seconds remaining" required></Form.Control>
   );
 }
 

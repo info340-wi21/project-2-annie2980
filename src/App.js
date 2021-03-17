@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Route, Switch, Redirect, NavLink} from 'react-router-dom';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Container, Row, Col, Alert } from 'react-bootstrap';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase/app';
 import 'whatwg-fetch';
@@ -138,66 +138,6 @@ function App() {
     }
   }, []);
 
-  // Reference to the user in the database
-  // const userRef = firebase.database().ref("user1");
-  // const recipesRef = userRef.child('recipes');
-  // const tasksRef = userRef.child('tasks');
-  // const statsRef = userRef.child('stats');
-  
-  // Set recipes to what is in the database
-  // useEffect(() => {
-  //   recipesRef.on('value', (snapshot) => {
-  //     const theRecipesObj = snapshot.val();
-  //     let objectKeyArray = Object.keys(theRecipesObj)
-  //     let recipesArray = objectKeyArray.map((key) => {
-  //       let singleRecipeObj = theRecipesObj[key];
-  //       singleRecipeObj.key = key;
-  //       return singleRecipeObj;
-  //     })
-  //     setRecipes(recipesArray);
-  //   })
-  // }, [])
-
-  // Set taskList to what is in the database
-  // useEffect(() => {
-  //   tasksRef.on('value', (snapshot) => {
-  //     const theTasksObj = snapshot.val();
-  //     let objectKeyArray = Object.keys(theTasksObj)
-  //     let tasksArray = objectKeyArray.map((key) => {
-  //       let singleTaskObj = theTasksObj[key];
-  //       singleTaskObj.key = key;
-  //       return singleTaskObj;
-  //     })
-  //     setTaskList(tasksArray);
-  //   })
-  // }, [])
-
-  // Fetch recipe data
-  // useEffect(() => {
-  //   fetch("./recipes.json")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       let processedData = data;
-  //       setRecipes(processedData);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.message);
-  //     })
-  // }, []);
-
-  // Fetch task data
-  // useEffect(() => {
-  //   fetch("./tasks.json")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       let processedData = data;
-  //       setTaskList(processedData);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.message);
-  //     })
-  // }, []);
-
   // AddRecipeModal states
   const [addRecipeModalShow, setAddRecipeModalShow] = useState(false);
 
@@ -261,7 +201,7 @@ function App() {
         <main>
           <div>
             <Switch>
-              <Route exact path="/"> <Dashboard user={user} timerList={timerList} setTimerList={setTimerList} recipes={recipes} taskList={taskList} totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} setTotalTime={setTotalTime} setTotalBakes={setTotalBakes} /> </Route>
+              <Route exact path="/"> <Dashboard user={user} timerList={timerList} recipes={recipes} taskList={taskList} totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} /> </Route>
               <Route path="/recipes"> <RecipeList recipes={recipes}/> </Route>
               <Route path="/about"> <About /> </Route>
               <Redirect to="/" />
@@ -442,7 +382,7 @@ function Login(props) {
 
 // Represents the Dashboard "page"
 function Dashboard(props) {
-  const {user, timerList, setTimerList, recipes, taskList, totalTime, totalDays, totalBakes, setTotalTime, setTotalBakes} = props;
+  const {user, timerList, recipes, taskList, totalTime, totalDays, totalBakes} = props;
 
   // Recipe Modal states
   const [modalShow, setModalShow] = useState(false);
@@ -546,40 +486,42 @@ function Dashboard(props) {
 
   return (
     <div>
-      <div className="container-fluid main-container">
+      <Container className="main-container" fluid>
         {/* <!-- Button to Add Timer --> */}
-        <div className="row alert alert-info add-timer-alert" role="alert">
-          <span className="add-timer-text">Click to Add a New Timer:</span>
-          <a className="btn ml-3" href="#add-timer">Add Timer</a>
-        </div>
+        <Row>
+          <Alert variant="info" className="add-timer-alert w-100" role="alert">
+            <span className="add-timer-text">Click to Add a New Timer:</span>
+            <a className="btn ml-3" href="#add-timer">Add Timer</a>
+          </Alert>
+        </Row>
 
-        <div className="row">
+        <Row>
           {/* <!-- Timer Table --> */}
-          <section className="col-sm-12 col-lg-8 col-xl-9 mt-3">
-            <div className="container-fluid">
+          <Col as="section" sm={12} lg={8} xl={9} className="mt-3">
+            <Container fluid>
               <h1>
                 Welcome to Your Dashboard, {user.displayName}!
               </h1>
               <p>Your current tasks are listed below:</p>
-            </div>
+            </Container>
             <TimerTable recipes={recipes} taskList={taskList} timerList={timerList} handleRemove={handleRemove} recipeCallback={clickedOnRecipe} showModal={showModal} />
-            <div className="container-fluid">
+            <Container fluid>
               <p className="tap-more">Tap on the item to see more information!</p>
               <p className="click-more">Click on the item to see more information!</p>
-            </div>
-          </section>
+            </Container>
+          </Col>
 
           {/* <!-- Add Timer --> */}
-          <section id="add-timer" className="add-timer col-sm-12 col-lg-4 col-xl-3 mt-3">
+          <Col as="section" sm={12} lg={4} xl={3} id="add-timer" className="add-timer mt-3">
             <AddTimer recipes={recipes} taskList={taskList} handleAdd={handleAdd} />
-          </section>
+          </Col>
 
           {/* <!-- Statistics Table --> */}
-          <section className="col-sm-12 col-lg-8 col-xl-9 mt-3 mb-5">
+          <Col as="section" sm={12} lg={8} xl={9} className="mt-3 mb-5">
             <StatsTable totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} />
-          </section>
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Container>
       {/* <!-- Recipe Info Modal --> */}
       <TimerRecipeModal show={modalShow} onHide={hideModal} recipe={recipe} location={location} task={task} handleRemoveAndClose={handleRemoveAndClose}/>
     </div>
