@@ -37,3 +37,4 @@ ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementByI
 //            [ ] Give credit on About page
 //      [x] Add more recipes (pizza, brownies, pound cake, cheesecake, eclairs, banana bread, lava cake, lemon bars)
 //      [x] Get rid of Form.js
+//      [ ] Test out user-content security rule
