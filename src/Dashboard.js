@@ -17,8 +17,10 @@ function Dashboard(props) {
     - totalTime: number representing the total amount of time spent baking (in seconds)
     - totalDays: number representing the number of days this account as existed
     - totalBakes: number representing the total number of bakes
+    - setErrorMessage: sets the error message for the alert
+    - setShowError: toggles showing the error message
   */
-  const {user, timerList, recipes, taskList, totalTime, totalDays, totalBakes} = props;
+  const {user, timerList, recipes, taskList, totalTime, totalDays, totalBakes, setErrorMessage, setShowError} = props;
 
   // Recipe Modal states
   const [modalShow, setModalShow] = useState(false);
@@ -68,7 +70,12 @@ function Dashboard(props) {
     // Update state
     // Push new timerList to database
     const timerListRef = firebase.database().ref(user.uid + "/timerList");
-    timerListRef.set(timerCopy);
+    timerListRef.set(timerCopy)
+      .catch((err) => {
+        console.error(err.message);
+        setErrorMessage(err.message);
+        setShowError(true);
+      });
   };
 
   // Function to handle adding a new timer to timerList
@@ -89,9 +96,19 @@ function Dashboard(props) {
     // Update stats
     // Push stats to database
     const userRef = firebase.database().ref(user.uid + "/stats");
-    userRef.child("totalTime").set(totalTime + getSeconds(newTimer.hr, newTimer.min, newTimer.sec));
+    userRef.child("totalTime").set(totalTime + getSeconds(newTimer.hr, newTimer.min, newTimer.sec))
+      .catch((err) => {
+        console.error(err.message);
+        setErrorMessage(err.message);
+        setShowError(true);
+      });
     if (newTimer.taskName.includes("Baking")) {
-      userRef.child("totalBakes").set(totalBakes + 1);
+      userRef.child("totalBakes").set(totalBakes + 1)
+        .catch((err) => {
+          console.error(err.message);
+          setErrorMessage(err.message);
+          setShowError(true);
+        });
     }
 
     // Add timer to list and clear state
@@ -108,7 +125,12 @@ function Dashboard(props) {
     // Update state
     // Push new timerList to database
     const timerListRef = firebase.database().ref(user.uid + "/timerList");
-    timerListRef.set(timerCopy);
+    timerListRef.set(timerCopy)
+      .catch((err) => {
+        console.log(err.message);
+        setErrorMessage(err.message);
+        setShowError(true);
+      });
   };
 
   return (

@@ -7,6 +7,7 @@ import RecipeList from './Recipes';
 import About from './About';
 import Dashboard from './Dashboard';
 import Login from './Login';
+import RenderError from './Errors';
 
 // FirebaseUI config
 const uiConfig = {
@@ -33,6 +34,10 @@ function App() {
   const [user, setUser] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Error message state
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   // State value of an array of current timers
   const [timerList, setTimerList] = useState([]);
 
@@ -51,7 +56,7 @@ function App() {
       if (firebaseUser) {
         // logged in
         setUser(firebaseUser);
-        
+
         // Reference to the user in the database
         let userRef = firebase.database().ref(firebaseUser.uid);
         // Grab a snapshot of this location - if it's not defined, populate database for new user
@@ -59,11 +64,17 @@ function App() {
         userRef.get().then((snapshot) => {
           if (!snapshot.exists()) {
             console.log("Adding user to database");
-            userRef.set(generateDefaultUserInfo(firebaseUser));
+            userRef.set(generateDefaultUserInfo(firebaseUser))
+              .catch((err) => {
+                setErrorMessage(err.message);
+                setShowError(true);
+              });
             userRef = firebase.database().ref(firebaseUser.uid);
           }
-        }).catch(function(error) {
-          console.error(error);
+        }).catch((error) => {
+          console.error(error.message);
+          setErrorMessage(error.message);
+          setShowError(true);
         }).then(() => {
           // Now, set the state for everything
           const statsRef = userRef.child('stats');
@@ -77,7 +88,7 @@ function App() {
             let msDiff = new Date().getTime() - new Date(theStatsObj.accountCreated).getTime();
             let timeDiff = msDiff / (1000 * 3600 * 24)
             setTotalDays(Math.ceil(timeDiff));
-          })
+          });
 
           // Set timers to what it is in the database
           timersRef.on('value', (snapshot) => {
@@ -90,7 +101,7 @@ function App() {
               });
               setTimerList(timerArr);
             }
-          })
+          });
         });
 
         setIsLoading(false);
@@ -115,8 +126,10 @@ function App() {
         setRecipes(processedData);
       })
       .catch((err) => {
-        console.log(err.message);
-      })
+        console.error(err.message);
+        setErrorMessage(err.message);
+        setShowError(true);
+      });
   }, []);
 
   // Fetch task data
@@ -128,8 +141,10 @@ function App() {
         setTaskList(processedData);
       })
       .catch((err) => {
-        console.log(err.message);
-      })
+        console.error(err.message);
+        setErrorMessage(err.message);
+        setShowError(true);
+      });
   }, []);
   
   // A callback function for logging out the current user
@@ -161,8 +176,9 @@ function App() {
 
         <main>
           <div>
+            <RenderError show={showError} error={errorMessage} setShow={setShowError} />
             <Switch>
-              <Route exact path="/"> <Dashboard user={user} timerList={timerList} recipes={recipes} taskList={taskList} totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} /> </Route>
+              <Route exact path="/"> <Dashboard user={user} timerList={timerList} recipes={recipes} taskList={taskList} totalTime={totalTime} totalDays={totalDays} totalBakes={totalBakes} setErrorMessage={setErrorMessage} setShowError={setShowError} /> </Route>
               <Route path="/recipes"> <RecipeList recipes={recipes} /> </Route>
               <Route path="/about"> <About /> </Route>
               <Redirect to="/" />
