@@ -73,7 +73,7 @@ function RecipeCard(props) {
         <Card.Img variant="top" className="card-img-top" src={recipe.src} alt={recipe.recipeName}/>
         <Card.Body>
           <Row>
-            <Col>
+            <Col className="mt-0">
               <Card.Title as="h1">{recipe.recipeName}</Card.Title>
               <Card.Text as="p" >Total Time: {recipeTime.hours + " hr " + recipeTime.minutes + " min"}</Card.Text>
             </Col>

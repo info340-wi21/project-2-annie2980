@@ -22,19 +22,3 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(<BrowserRouter> <App /> </BrowserRouter>, document.getElementById('root'));
-
-// TODO:
-// - HIGH PRIORITY
-//      [x] Set up database (generally, I think?)
-//      [x] Add user stats to database
-//      [x] Do Coco's suggestion of breaking the <Dashboard> into smaller components
-//            - You honestly can't reduce it any further (i tried)
-//      [x] Finish moving bootstrap to react bootstrap (footer, login)
-//            [x] Remove stylesheet from index.html?
-//      [x] Remove recipes and tasks from databse
-//      [x] Fetch external data
-//      [x] Add more icons for tasks (add proofing and change the resting in pizza to proofing)
-//            [x] Give credit on About page
-//      [x] Add more recipes (pizza, brownies, pound cake, cheesecake, eclairs, banana bread, lava cake, lemon bars)
-//      [x] Get rid of Form.js
-//      [ ] Test out user-content security rule

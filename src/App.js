@@ -223,7 +223,7 @@ function generateDefaultUserInfo(user) {
 function NavigationBar(props) {
   const {user, handleSignOut} = props;
 
-  let profilePic = "img/blank-profile-picture-pixabay.png";
+  let profilePic = "img/baker-hat-pixabay.jpg";
   if (user.photoURL !== null) {
     profilePic = user.photoURL
   }

@@ -74,7 +74,7 @@ function TimerRecipeText(props) {
       </p>
       <hr title={"End of timer information"}/>
       <div className="text-center">
-        <Image src={src} className="w-75" alt={recipeName} rounded/>
+        <Image src={src} className="w-100" alt={recipeName} rounded/>
       </div>
       {recipeSteps}
     </div>

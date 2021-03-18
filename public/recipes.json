@@ -98,7 +98,7 @@
         "prepTime": "11:30:00",
         "cookTime": "00:20:00",
         "totalTime": "11:50:00",
-        "src": "img/croissant.jpg"
+        "src": "img/croissants-pixabay.jpg"
     },
     {
         "recipeName": "Chocolate Cake",
@@ -126,7 +126,7 @@
         "prepTime": "00:10:00",
         "cookTime": "00:8:00",
         "totalTime": "00:18:00",
-        "src": "img/cookies.jpg"
+        "src": "img/cookies-unsplash.jpg"
     },
     {
         "recipeName": "Cupcakes",
