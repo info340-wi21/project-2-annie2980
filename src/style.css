@@ -1,0 +1,321 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.4rem;
+  font-weight: 400;
+}
+
+/* Navigation Bar Properties */
+.navbar {
+  background-color: #d8d8d8;
+  padding-left: 1.5rem;
+}
+
+nav img {
+  width: 50px; 
+  height: 50px;
+}
+
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-profile-pic-text {
+  display: none;
+}
+
+.navbar-profile-pic {
+  display: none;
+}
+
+/* Footer Properties */
+footer {
+  display: none;
+}
+
+/* Error Alert Properties */
+.alert-danger {
+  margin-bottom: 0;
+}
+
+/* Table Properties */
+thead {
+  background-color:#00000013;
+}
+
+.task-text, .loc-text {
+  display: none;
+}
+
+td.time-text {
+  font-size: 1.7rem;
+}
+
+.item-text {
+  cursor: pointer;
+}
+
+.time-text {
+  text-align: right;
+}
+
+.task-icon {
+  width: 45px;
+  height: 45px;
+  margin-right: 10px;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+}
+
+.btn, .dashboard-header {
+  background-color: #4fa7a0;
+  color: white;
+  font-weight: 500;
+}
+
+.delete-btn, .close-btn {
+  background-color: #c72121;
+}
+
+.tap-more, .click-more {
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+.click-more {
+  display: none;
+}
+
+/* Add Timer Properties */
+.add-timer-text {
+  height: 40px;
+  line-height: 40px;
+}
+
+.add-timer > .card {
+  width: 100%;
+}
+
+.timer-input input, .timer-input label {
+  text-align: center;
+}
+
+.timer-btn {
+  width: 100%;
+}
+
+/* stylelint-disable */
+/* Remove arrows from the number inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+}
+/* stylelint-enable */
+
+/* Modal Properties */
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Form Properties */
+.form-card {
+  border: none;
+}
+
+.form-subheader {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.add-step-btn {
+  background-color: #9c9c9c;
+  color: white;
+}
+
+/* Statistics Table Properties */
+.stats-data {
+  text-align: right;
+  color: #4fa7a0;
+  font-weight: 600;
+}
+
+/* Search Form Properties */
+.search-form {
+  padding-top: 30px;
+  padding-left: 15px;
+}
+
+.search-form-group {
+  margin-right: 10px;
+}
+
+/* Recipe Card Properties */
+.card-text {
+  display: none;
+}
+
+.card-body .col {
+  margin-top: 0.9rem;
+}
+
+.recipe-card {
+  cursor: pointer;
+}
+
+/* About Properties */
+.subtitle {
+  font-weight: 400;
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+.about-image {
+  display: none;
+}
+
+.profile-pic {
+  margin-left: auto;
+  margin-right: auto;
+  width: 15em;
+  height: 15em;
+}
+
+.about-section {
+  text-align: center;
+}
+
+/* Sign-in Page Properties */
+.login-page {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  align-items: center;
+  text-align: center;
+}
+
+.login-logo {
+  width: 5em;
+  height: 5em;
+}
+
+.login-images {
+  display: none;
+}
+
+/* For devices 576px or greater */
+@media (min-width: 576px) {
+  /* Recipe Card Properties */
+  .card-text {
+    display: block;
+  }
+}
+
+/* For devices 768px or greater */
+@media (min-width: 768px) {
+  /* Table Properties */
+  .loc-text, .task-text {
+    display: table-cell;
+  }
+
+  .task-icon, .task-icon-text {
+    display: none;
+  }
+
+  td.time-text {
+    font-size: 1rem;
+  }
+
+  /* Add Timer Properties */
+  .add-timer-alert {
+    display: none;
+  }
+
+  /* Footer Properties */
+  footer {
+    display: block;
+  }
+
+  .copyright {
+    text-align: center;
+  }
+
+  /* About Page */
+  .about-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 20em;
+    max-height: 20em;
+  }
+
+  /* Login Page Properties */
+  .login-images {
+    display: block;
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .login-images img {
+    margin-left: auto;
+    margin-right: auto;
+    height: 10em;
+  }
+
+  /* Navbar */
+  .dropdown-toggle:after {
+    content: none
+  }
+
+  .navbar-profile-name {
+    display: none;
+  }
+
+  .navbar-profile-pic-text {
+    display: inline;
+  }
+
+  .navbar-profile-pic {
+    display: inline;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #bebebe;
+  }
+}
+
+/* For devices 992px or greater */
+@media (min-width: 992px) {
+  /* Table Properties */
+  .tap-more {
+    display: none;
+  }
+
+  .click-more {
+    display: block;
+  }
+
+  /* About Page */
+  .about-section {
+    text-align: left;
+  }
+}

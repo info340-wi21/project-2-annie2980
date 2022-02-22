@@ -1,0 +1,301 @@
+[
+    {
+        "recipeName": "Apple Pie",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:45:00",
+                "description": "Bake at 375°F for 25 minutes. Remove foil; bake until crust is golden brown and filling is bubbly, 20 minutes longer."
+            }
+        ],
+        "prepTime": "00:20:00",
+        "cookTime": "00:45:00",
+        "totalTime": "01:05:00",
+        "src": "img/apple-pie.jpg"
+    },
+    {
+        "recipeName": "Pumpkin Pie",
+        "steps": [
+            {
+                "task": "First Baking",
+                "time": "00:15:00",
+                "description": "Bake at 425°F for 15 minutes."
+            },
+            {
+                "task": "Second Baking",
+                "time": "00:40:00",
+                "description": "Reduce oven temperature to 350°F and continue baking 35 to 40 minutes or until knife inserted 1 inch from crust comes out clean."
+            }
+        ],
+        "prepTime": "00:15:00",
+        "cookTime": "00:55:00",
+        "totalTime": "01:10:00",
+        "src": "img/pumpkin-pie.jpg"
+    },
+    {
+        "recipeName": "Blueberry Scones",
+        "steps": [
+            {
+                "task": "Chilling",
+                "time": "00:15:00",
+                "description": "Place scones on a plate or lined baking sheet (if your fridge has space!) and refrigerate for at least 15 minutes."
+            },
+            {
+                "task": "Baking", 
+                "time": "00:25:00",
+                "description": "Line a large baking sheet with parchment paper or silicone baking mat. After refrigerating, arrange scones 2-3 inches apart on the prepared baking sheet(s). Bake at 400°F for 25 minutes or until golden brown around the edges and lightly browned on top."
+            }
+        ],
+        "prepTime": "00:30:00",
+        "cookTime": "00:25:00",
+        "totalTime": "00:55:00",
+        "src": "img/blueberry-scones.jpg"
+    },
+    {
+        "recipeName": "Croissants",
+        "steps": [
+            {
+                "task": "First Chilling",
+                "time": "00:30:00",
+                "description": "Place the entire baking sheet in the refrigerator and allow the covered dough to rest in the refrigerator for 30 minutes."
+            },
+            {
+                "task": "Second Chilling",
+                "time": "04:00:00",
+                "description": "Place the rolled out dough back onto the baking sheet. Cover the rolled out dough with plastic wrap or aluminum foil, place the entire baking sheet in the refrigerator and allow the covered dough to rest in the refrigerator for 4 hours or overnight. (Up to 24 hours is ok)."
+            },
+            {
+                "task": "Third Chilling",
+                "time": "00:30:00",
+                "description": "Place the entire baking sheet in the refrigerator and chill the butter layer for 30 minutes."
+            },
+            {
+                "task": "Fourth Chilling",
+                "time": "00:30:00",
+                "description": "Place the folded dough on the baking sheet, cover with plastic wrap or aluminum foil, and refrigerate for 30 minutes before the 3rd turn."
+            },
+            {
+                "task": "Fifth Chilling",
+                "time": "04:00:00",
+                "description": "Place the folded dough on the lined baking sheet, cover with plastic wrap or aluminum foil, and refrigerate for 4 hours or overnight. (Up to 24 hours is ok)."
+            },
+            {
+                "task": "Resting",
+                "time": "01:00:00",
+                "description": "Loosely cover the croissants with plastic wrap or aluminum foil and allow to rest at room temperature on the counter for 1 hour."
+            },
+            {
+                "task": "Sixth Chilling",
+                "time": "01:00:00",
+                "description": "Place the croissants in the refrigerator to rest for 1 hour or up to 12 hours."
+            },
+            {
+                "task": "Baking", 
+                "time": "00:20:00",
+                "description": "Bake at 400°F until croissants are golden brown, about 20 minutes. Rotate the pans halfway through baking."
+            }
+        ],
+        "prepTime": "11:30:00",
+        "cookTime": "00:20:00",
+        "totalTime": "11:50:00",
+        "src": "img/croissants-pixabay.jpg"
+    },
+    {
+        "recipeName": "Chocolate Cake",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:30:00",
+                "description": "Bake at  350°F for 30-35 minutes, until a toothpick or cake tester inserted in the center of the chocolate cake comes out clean."
+            }
+        ],
+        "prepTime": "00:15:00",
+        "cookTime": "00:30:00",
+        "totalTime": "00:45:00",
+        "src": "img/chocolate-cake-pixabay.jpg"
+    },
+    {
+        "recipeName": "Chocolate Chip Cookies",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:08:00",
+                "description": "Bake at 375°F for approximately 8-10 minutes. Take them out when they are just barely starting to turn brown."
+            }
+        ],
+        "prepTime": "00:10:00",
+        "cookTime": "00:8:00",
+        "totalTime": "00:18:00",
+        "src": "img/cookies-unsplash.jpg"
+    },
+    {
+        "recipeName": "Cupcakes",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:18:00",
+                "description": "Bake at 350°F for about 18 minutes or until centers are springy to the touch."
+            }
+        ],
+        "prepTime": "00:15:00",
+        "cookTime": "00:18:00",
+        "totalTime": "00:33:00",
+        "src": "img/cupcakes.jpg"
+    },
+    {
+        "recipeName": "Macarons",
+        "steps": [
+            {
+                "task": "Resting",
+                "time": "01:00:00",
+                "description": "Let the macarons sit at room temperature for 30 minutes to 1 hour, until dry to the touch."
+            },
+            {
+                "task": "Baking", 
+                "time": "00:17:00",
+                "description": "Bake the macarons at 300°F for 17 minutes, until the feet are well-risen and the macarons don’t stick to the parchment paper."
+            }
+        ],
+        "prepTime": "01:30:00",
+        "cookTime": "00:17:00",
+        "totalTime": "01:47:00",
+        "src": "img/pink-macarons.jpg"
+    },
+    {
+        "recipeName": "Margherita Pizza",
+        "steps": [
+            {
+                "task": "Proofing",
+                "time": "02:00:00",
+                "description": "Cover the bowl with a kitchen towel (or plastic wrap) and allow the dough to rise in a warm, dry area of your kitchen for 2 hours or until the dough has doubled in size."
+            },
+            {
+                "task": "Pizza Stone Baking", 
+                "time": "00:30:00",
+                "description": "Place the pizza stone on the center (or top third) rack of your oven, and preheat the oven and pizza stone to 550°F (for at least 30-45 minutes)."
+            },
+            {
+                "task": "Baking", 
+                "time": "00:08:00",
+                "description": "Gently slide the pizza from the peel onto the heated baking stone. Bake for 7 to 8 minutes, or until the crust is golden and the cheese is bubbling and caramelized and the edges of the pizza are golden brown."
+            }
+        ],
+        "prepTime": "02:50:00",
+        "cookTime": "00:08:00",
+        "totalTime": "02:58:00",
+        "src": "img/margherita-pizza-unsplash.jpg"
+    },
+    {
+        "recipeName": "Brownies",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:45:00",
+                "description": "Bake for 40 to 48 minutes at 325°F, or until a toothpick comes out with only a few crumbs attached."
+            }
+        ],
+        "prepTime": "00:10:00",
+        "cookTime": "00:45:00",
+        "totalTime": "00:55:00",
+        "src": "img/brownies-unsplash.jpg"
+    },
+    {
+        "recipeName": "Pound Cake",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:45:00",
+                "description": "Scrape the batter into the prepared loaf pan and bake for 45-55 minutes at 350°F until the cake is golden brown and a toothpick comes out mostly clean with only a couple moist crumbs."
+            }
+        ],
+        "prepTime": "00:15:00",
+        "cookTime": "00:45:00",
+        "totalTime": "01:00:00",
+        "src": "img/pound-cake-unsplash.jpg"
+    },
+    {
+        "recipeName": "Cheesecake",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "01:15:00",
+                "description": "Transfer to the center rack of your oven and bake on 325°F (160°C) for about 75 minutes."
+            }
+        ],
+        "prepTime": "00:20:00",
+        "cookTime": "01:15:00",
+        "totalTime": "01:35:00",
+        "src": "img/cheesecake-unsplash.jpg"
+    },
+    {
+        "recipeName": "Eclairs",
+        "steps": [
+            {
+                "task": "Chilling",
+                "time": "02:00:00",
+                "description": "Chill the custard for at least 2 hours or until ready to serve. The custard can be made up to 24 hours in advance. Refrigerate until 1 hour before using."
+            },
+            {
+                "task": "First Baking", 
+                "time": "00:15:00",
+                "description": "Bake at 425°F for 15 minutes."
+            },
+            {
+                "task": "Second Baking", 
+                "time": "00:25:00",
+                "description": "Reduce oven temperature to 375°F and continue baking for 25 minutes more."
+            }
+        ],
+        "prepTime": "02:35:00",
+        "cookTime": "00:35:00",
+        "totalTime": "03:10:00",
+        "src": "img/eclairs-unsplash.jpg"
+    },
+    {
+        "recipeName": "Banana Bread",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:55:00",
+                "description": "Pour the batter into your prepared loaf pan. Bake for 50 minutes to 1 hour at 350°F (175°C), or until a tester inserted into the center comes out clean."
+            }
+        ],
+        "prepTime": "00:15:00",
+        "cookTime": "00:55:00",
+        "totalTime": "01:10:00",
+        "src": "img/banana-bread-unsplash.jpg"
+    },
+    {
+        "recipeName": "Lava Cake",
+        "steps": [
+            {
+                "task": "Baking", 
+                "time": "00:14:00",
+                "description": "Place ramekins onto a baking sheet and bake at 425°F (218°C) for 12-14 minutes until the sides appear solid and firm– the tops will still look soft."
+            }
+        ],
+        "prepTime": "00:15:00",
+        "cookTime": "00:14:00",
+        "totalTime": "00:29:00",
+        "src": "img/lava-cake-unsplash.jpg"
+    },
+    {
+        "recipeName": "Lemon Bars",
+        "steps": [
+            {
+                "task": "Crust Baking", 
+                "time": "00:20:00",
+                "description": "Bake at 325°F (163°C) for 20-22 minutes or until the edges are lightly browned. Remove from the oven. Using a fork, poke holes all over the top of the warm crust (not all the way through the crust)."
+            },
+            {
+                "task": "Baking", 
+                "time": "00:25:00",
+                "description": "Bake the bars at 325°F (163°C) for 22-26 minutes or until the center is relatively set and no longer jiggles."
+            }
+        ],
+        "prepTime": "00:20:00",
+        "cookTime": "00:45:00",
+        "totalTime": "01:05:00",
+        "src": "img/lemon-bars-unsplash.jpg"
+    }
+]
